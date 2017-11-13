@@ -1,0 +1,58 @@
+[
+	{ 
+		"location": "House of Blues Chicago", 
+	  	"time": "11-17-2017",
+	  	"quantity": 1800, 
+	  	"keywords": [ "rock", "concert", "highlysuspect", "blues", "live" ],
+	  	"subject" : "Highly Suspect"  				
+	},
+	{
+		"location": "The Forge, Joliet IL", 
+		"time": "11-21-2017",
+		"quantity": 2500, 
+		"keywords": [ "popevil", "joliet", "forge", "17+", "cool", "show" ],
+		"subject": "Pop Evil"
+	},
+	{
+		"location": "Allstate Arena IL",
+		"time": "11-22-2017",
+		"quantity": 17560, 
+		"keywords": [ "ozuna", "lit", "litty", "cool", "pop", "17+" ],
+		"subject": "Ozuna"
+	},
+	{
+		"location": "CD and ME IL",
+		"time": "11-22-2017",
+		"quantity" : 10620, 
+		"keywords": [ "soft", "maggie", "show", "live", "music" ],
+		"subject": "Maggie Speaks"
+	},
+	{
+		"location": "Coronado Performing Arts Center IL",
+		"time": "11-24-2017",
+		"quantity" : 15200, 
+		"keywords": [ "hard", "oak", "live", "music", "dope", "amazing" ],
+		"subject": "Oak Ridge Boys"
+	},
+	{
+		"location": "Chicago Symphony Center",
+		"time": "1-20-2018",
+		"quantity" : 2522, 
+		"keywords": [ "chicago", "symphony", "orchestra", "concert", "live" ],
+		"subject": "Chicago Symphony Orchestra"
+	},
+	{
+		"location": "Genesse Theater IL",
+		"time": "1-26-2018",
+		"quantity" : 1822, 
+		"keywords": [ "soft", "marx", "music", "concert", "live" ],
+		"subject":  "Richard Marx"
+	},
+	{
+		"location": "Metro Smart Bar Chicago, IL",
+		"time": "2-09-2018",
+		"quantity" : 1100, 
+		"keywords": [ "enter", "bar", "lit", "concert", "grunge", "screamo"],
+		"subject": "Enter Shikari"
+	}
+]
