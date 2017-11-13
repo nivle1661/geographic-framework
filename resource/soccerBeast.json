@@ -1,0 +1,58 @@
+[
+	{ 
+		"location": "Camp Nou, Barcelona", 
+	  	"time": "12-5-17",
+	  	"quantity": 78736, 
+	  	"keywords": [ "forcabarca", "barcelona", "soccer", "goal", "championsleague", "sporting" ], 
+	  	"subject": "FC Barcelona"  				
+	},
+	{
+		"location": "Santiago Bernabéu, Madrid", 
+		"time": "12-6-17",
+		"quantity": 69736, 
+		"keywords": [ "madrid", "losblancos", "galacticos", "ronaldo", "championsleague", "bvb" ],
+		"subject": "Real Madrid"
+	},
+	{
+		"location": "Wanda Metropolitano, Madrid",
+		"time": "11-18-2017",
+		"quantity": 60409, 
+		"keywords": [ "madrid", "atletico", "griezmann", "cholo", "madridderby" "real" ],
+		"subject": "Club Atlético de Madrid"
+	},
+	{
+		"location": "San Mamés, Bilbao",
+		"time": "12-2-2017",
+		"quantity" : 45231, 
+		"keywords": [ "bilbao", "atletic", "madrid", "soccer",  "basque", "goal", "leones" ],
+		"subject": "Athletic Club Bilbao"
+	},
+	{
+		"location": "Mestalla, Valencia",
+		"time": "11-26-2017",
+		"quantity" : 36045, 
+		"keywords": [ "valencia", "barca", "soccer", "futbol", "losche", "taronges" ],
+		"subject": "Valencia CF"
+	},
+	{
+		"location": "Estadio El Alcoraz, Huesca",
+		"time": "1-7-2018",
+		"quantity" : 5500, 
+		"keywords": [ "huesca", "oviedo", "segunda", "soccer", "aragon", "goal" ],
+		"subject": "SD Huesca"
+	},
+	{
+		"location": "El Sadar, Pamplona",
+		"time": "1-21-2018",
+		"quantity" : 17760, 
+		"keywords": [ "sugunda", "cultural", "leon", "futbol", "osasuna", "soccer" ],
+		"subject": "CA Osasuna"
+	},
+	{
+		"location": "La Rosaleda, Málaga",
+		"time": "11-28-2017",
+		"quantity" : 22473, 
+		"keywords": [ "malaga", "copa", "rey", "numancia", "futbol", "comback" ],
+		"subject": "Málaga CF"
+	}
+]
