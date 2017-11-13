@@ -82,12 +82,18 @@ public class MapperGui extends JPanel implements MapperListener {
   private void initializeMenu() {
     menuBar = new JMenuBar();
     JMenu menu = new JMenu(MENU_TITLE);
+    JPanel awesome = this;
+
     newDatasetMenuItem = new JMenuItem(MENU_NEW_DATASET);
     newDatasetMenuItem.setMnemonic(KeyEvent.VK_N);
     newDatasetMenuItem.addActionListener(new ActionListener() {
       @Override
       public void actionPerformed(final ActionEvent event) {
-
+        String[] typeValues = {"Letter tile", "Special tile"};
+        String name = (String) JOptionPane.showInputDialog(awesome,
+                "Select type of tile to place", "Placing tile...",
+                JOptionPane.QUESTION_MESSAGE, null, typeValues,
+                typeValues[0]);
       }
     });
     menu.add(newDatasetMenuItem);
