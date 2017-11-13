@@ -78,7 +78,7 @@ public class MapperFramework {
    * @param name for the dataset
    * @param source of data
    */
-  public void getDataSet(final String name, final String subject,
+  public void enterDataSet(final String name, final String subject,
                          final String source) {
     DataSet newDataSet = new DataSet(name);
     currentDataplugin.setSubject(subject);
@@ -91,5 +91,17 @@ public class MapperFramework {
     currentDataplugin.closeConnection();
 
     datasets.add(newDataSet);
+  }
+
+  /**
+   * Returns array of the names of datasets.
+   * @return array of the names of datasets
+   */
+  public String[] datasets() {
+    String[] availableDatasets = new String[datasets.size()];
+    for (int i = 0; i < datasets.size(); i++) {
+      availableDatasets[i] = datasets.get(i).toString();
+    }
+    return availableDatasets;
   }
 }

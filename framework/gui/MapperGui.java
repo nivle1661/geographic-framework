@@ -86,25 +86,28 @@ public class MapperGui extends JPanel implements MapperListener {
 
     newDatasetMenuItem = new JMenuItem(MENU_NEW_DATASET);
     newDatasetMenuItem.setMnemonic(KeyEvent.VK_N);
-    newDatasetMenuItem.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent event) {
-        String[] typeValues = {"Letter tile", "Special tile"};
-        String name = (String) JOptionPane.showInputDialog(awesome,
-                "Select type of tile to place", "Placing tile...",
-                JOptionPane.QUESTION_MESSAGE, null, typeValues,
-                typeValues[0]);
+    newDatasetMenuItem.addActionListener(event -> {
+      String[] availablePlugins = new String[dataplugins.size()];
+      for (int i = 0; i < dataplugins.size(); i++) {
+        availablePlugins[i] = dataplugins.get(i).toString();
       }
+      String name = (String) JOptionPane.showInputDialog(awesome,
+              "Select a data plugin", "Taking data...",
+              JOptionPane.QUESTION_MESSAGE, null, availablePlugins,
+              availablePlugins[0]);
+      //TODO: Take in data
     });
     menu.add(newDatasetMenuItem);
 
     removeDatasetMenuItem = new JMenuItem(MENU_REMOVE_DATASET);
     removeDatasetMenuItem.setMnemonic(KeyEvent.VK_N);
-    removeDatasetMenuItem.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent event) {
-
-      }
+    removeDatasetMenuItem.addActionListener(event -> {
+      String[] availableDatasets = framework.datasets();
+      //TODO: Check for 0
+      String name = (String) JOptionPane.showInputDialog(awesome,
+              "Select a data plugin", "Taking data...",
+              JOptionPane.QUESTION_MESSAGE, null, availableDatasets,
+              availableDatasets[0]);
     });
     menu.add(removeDatasetMenuItem);
 
