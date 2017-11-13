@@ -3,6 +3,7 @@ package core.datapoint;
 import core.ClientEvent;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +52,17 @@ public class DataSet {
     Event newEvent = new Event(clientEvent);
 
     if (newEvent != null) {
+      List<String> temp = newEvent.keywords;
+      String location = newEvent.location;
       events.add(newEvent);
+
+      //Incrementing values for frequency counts
+      for (String keyword : temp) {
+        int count = freqKeyword.containsKey(keyword) ? freqKeyword.get(keyword) : 0;
+        freqKeyword.put(keyword, count + 1);
+      }
+      int count = freqLoc.containsKey(location) ? freqLoc.get(location) : 0;
+      freqKeyword.put(location, count + 1);
     }
   }
 
@@ -61,6 +72,7 @@ public class DataSet {
    */
   public void process() {
     //TODO: Do this
+    Collections.sort(events);
   }
 
   /**

@@ -2,6 +2,18 @@ package core;
 
 public interface DataPlugin {
   /**
+   * Set the subject of the plugin.
+   * @param subject
+   */
+  public void setSubject(String subject);
+
+  /**
+   * Gets the subject of the plugin.
+   * @return subject of the plugin
+   */
+  public String getSubject();
+
+  /**
    * Opens the connection with the source file/webpage (e.g.
    * making BufferReader).
    * @param arg sourcefor data
