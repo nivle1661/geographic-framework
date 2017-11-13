@@ -8,14 +8,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapperFramework {
+  /** GUI listener. */
   private MapperListener listener;
+  /** Registered data plugins. */
   private List<DataPlugin> dataplugins;
+  /** Registered visual plugins. */
   private List<VisualPlugin> visualplugins;
+  /** Available datasets. */
   private List<DataSet> datasets;
 
+  /** Current data plugin being used. */
   private DataPlugin currentDataplugin;
+  /** Current visual plugin being used. */
   private VisualPlugin currentVisualplugin;
 
+  /**
+   * Sole constructor for the framework.
+   */
   public MapperFramework() {
     listener = new MapperGui();
     dataplugins = new ArrayList<>();
@@ -80,5 +89,7 @@ public class MapperFramework {
       newDataSet.addEvent(clientEvent);
     }
     currentDataplugin.closeConnection();
+
+    datasets.add(newDataSet);
   }
 }
