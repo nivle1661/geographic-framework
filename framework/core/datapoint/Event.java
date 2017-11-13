@@ -9,6 +9,7 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -44,23 +45,46 @@ public class Event implements Comparable<Event> {
   private int priority;
 
   /**
+   * Returns the distance between two events based on longitude, latitude.
+   * It's possible to do an API call, but might take too long.
+   * @param event1 starting point
+   * @param event2 ending point
+   * @return distance between event1 and event2, in miles
+   */
+  public static double distance(final Event event1, final Event event2) {
+    double earthRadius = 3959; //miles
+    double dLat = Math.toRadians(event2.latitude - event1.latitude);
+    double dLng = Math.toRadians(event2.longitude -event1.longitude);
+    double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(Math.toRadians(event1.latitude))
+                    * Math.cos(Math.toRadians(event2.latitude))
+                    * Math.sin(dLng / 2) * Math.sin(dLng / 2);
+    double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return (earthRadius * c);
+  }
+
+  /**
    * Gets the latitude and longitude positions of an address using google maps API
    * @param address
    * @return latitude and longitude
    * @throws Exception
    */
-  public static String[] getLatLongPositions(String address) throws Exception
+  public static String[] getLatLongPositions(final String address) throws Exception
   {
     int responseCode = 0;
-    String api = "http://maps.googleapis.com/maps/api/geocode/xml?address="
-            + URLEncoder.encode(address, "UTF-8") + "&sensor=true";
+    String api = "http://dev.virtualearth.net/REST/v1/Locations?query="
+            + URLEncoder.encode(address, "UTF-8")
+            + "&maxResults=1"
+            + "&key=AoM6SIKHt1RS8tAZdnN7dNfrPcW-E8sPXFjPMNEOH2_oqoxNI7nPG22Dk4-geIgH";
     System.out.println("URL : "+api);
     URL url = new URL(api);
     HttpURLConnection httpConnection = (HttpURLConnection)url.openConnection();
+    httpConnection.setRequestMethod("GET");
+    httpConnection.setRequestProperty("Accept", "application/xml");
+
     httpConnection.connect();
     responseCode = httpConnection.getResponseCode();
-    if(responseCode == 200)
-    {
+    if (responseCode == 200) {
       DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();;
       Document document = builder.parse(httpConnection.getInputStream());
       XPathFactory xPathfactory = XPathFactory.newInstance();
@@ -69,9 +93,11 @@ public class Event implements Comparable<Event> {
       String status = (String)expr.evaluate(document, XPathConstants.STRING);
       if(status.equals("OK"))
       {
-        expr = xpath.compile("//geometry/location/lat");
+        expr = xpath.compile(
+                "//ResourceSets/ResourceSet/Resources/GeocodePoint/Latitude");
         String latitude = (String)expr.evaluate(document, XPathConstants.STRING);
-        expr = xpath.compile("//geometry/location/lng");
+        expr = xpath.compile(
+                "//ResourceSets/ResourceSet/Resources/GeocodePoint/Longitude");
         String longitude = (String)expr.evaluate(document, XPathConstants.STRING);
         return new String[] {latitude, longitude};
       } else {
@@ -108,8 +134,8 @@ public class Event implements Comparable<Event> {
 
     String[] temp = event.date.split("/");
     int year = Integer.parseInt(temp[2]);
-    int month = Integer.parseInt(temp[0]);
-    int day = Integer.parseInt(temp[1]);
+    int month = Integer.parseInt(temp[1]);
+    int day = Integer.parseInt(temp[0]);
 
     Calendar c = Calendar.getInstance();
     c.set(year, month, day, 12, 0);
@@ -120,7 +146,7 @@ public class Event implements Comparable<Event> {
    * Sets the priority of the event.
    * @param priority of event
    */
-  public void setPriority(int priority) {
+  public void setPriority(final int priority) {
     this.priority = priority;
   }
 
@@ -138,7 +164,7 @@ public class Event implements Comparable<Event> {
    * @return comparison of times.
    */
   @Override
-  public int compareTo(Event o) {
+  public int compareTo(final Event o) {
     return time.compareTo(o.time);
   }
 }

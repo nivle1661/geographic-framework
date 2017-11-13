@@ -45,6 +45,16 @@ public class DataSet {
   }
 
   /**
+   * Sets a single priority for all events.
+   * @param priority
+   */
+  public void setPriority(final int priority) {
+    for (Event event : events) {
+      event.setPriority(priority);
+    }
+  }
+
+  /**
    * Adds an event from client input.
    * @param clientEvent client input
    */
