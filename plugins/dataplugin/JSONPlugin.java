@@ -4,8 +4,7 @@ import core.ClientEvent;
 import core.DataPlugin;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
@@ -60,8 +59,8 @@ public class JSONPlugin implements DataPlugin {
 	public boolean openConnection(String arg) {
 		ClassLoader classLoader = getClass().getClassLoader();
 		try {
-			File file = new File(classLoader.getResource(arg).getFile());
-		        this.reader = new BufferedReader(new FileReader(file));
+			InputStream stream = classLoader.getResourceAsStream(arg);
+		        this.reader = new BufferedReader(new InputStreamReader(stream));
 		        this.readFile();
 		        this.jsonData = new JSONArray(this.fileData);
 		        this.currentIndex = 0;
