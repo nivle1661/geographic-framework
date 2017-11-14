@@ -33,16 +33,29 @@ public class JSONPlugin implements DataPlugin {
 	private JSONObject next;
 	private int currentIndex;
 	
+	/**
+	 * set the subject of the plugin
+	 * @param subject desired subject
+	 */
 	@Override
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
 	
+	/**
+	 * getter for the plugin subject
+	 * @return subject of the plugin
+	 */
 	@Override
 	public String getSubject() {
 		return this.subject;
 	}
 	
+	/**
+	 * Reads the specified json file and creates a json array containing the json objects in the file
+	 * @param arg path of the file
+	 * @return true on success
+	 */
 	@Override
 	public boolean openConnection(String arg) {
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -58,6 +71,10 @@ public class JSONPlugin implements DataPlugin {
 		return this.reader != null;
 	}
 	
+	/**
+	 * Loads the next json object into a ClientEvent
+	 * @return a ClientEvent containing all relevant information on success
+	 */
 	@Override
 	public ClientEvent getEvent() {
 		try {
@@ -77,6 +94,10 @@ public class JSONPlugin implements DataPlugin {
 		return new ClientEvent(null, null, null, null, 0);
 	}
 	
+	/**
+	 * checks the index of the json object array for validity of next object
+	 * @return true if the next object exists and is valid
+	 */
 	@Override
 	public boolean hasNext() {
 		if (this.reader == null || this.jsonData == null || currentIndex >= this.jsonData.length()) {
@@ -91,7 +112,9 @@ public class JSONPlugin implements DataPlugin {
 		return this.next != null;
 	}
 	
-	
+	/**
+	 * closes resources
+	 */
 	@Override
 	public void closeConnection() {
 		if (this.reader != null) {
@@ -108,6 +131,10 @@ public class JSONPlugin implements DataPlugin {
 		return "JSON loader";
 	}
 	
+	/**
+	 * reads the file specified when the connection was open and stores it as a string 
+	 * to be converted to json
+	 */
 	private void readFile() {
 		if (this.reader == null) {
 			return;
