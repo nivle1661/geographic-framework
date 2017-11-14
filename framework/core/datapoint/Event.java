@@ -75,6 +75,7 @@ public class Event implements Comparable<Event> {
     String api = "http://dev.virtualearth.net/REST/v1/Locations?query="
             + URLEncoder.encode(address, "UTF-8")
             + "&maxResults=1"
+            + "&o=xml"
             + "&key=AoM6SIKHt1RS8tAZdnN7dNfrPcW-E8sPXFjPMNEOH2_oqoxNI7nPG22Dk4-geIgH";
     System.out.println("URL : "+api);
     URL url = new URL(api);
@@ -89,22 +90,17 @@ public class Event implements Comparable<Event> {
       Document document = builder.parse(httpConnection.getInputStream());
       XPathFactory xPathfactory = XPathFactory.newInstance();
       XPath xpath = xPathfactory.newXPath();
-      XPathExpression expr = xpath.compile("/GeocodeResponse/status");
-      String status = (String)expr.evaluate(document, XPathConstants.STRING);
-      if(status.equals("OK"))
-      {
-        expr = xpath.compile(
-                "//ResourceSets/ResourceSet/Resources/GeocodePoint/Latitude");
-        String latitude = (String)expr.evaluate(document, XPathConstants.STRING);
-        expr = xpath.compile(
-                "//ResourceSets/ResourceSet/Resources/GeocodePoint/Longitude");
-        String longitude = (String)expr.evaluate(document, XPathConstants.STRING);
-        return new String[] {latitude, longitude};
-      } else {
-        throw new Exception("Error from the API - response status: " + status);
-      }
+      XPathExpression expr;
+      expr = xpath.compile(
+               "//ResourceSets/ResourceSet/Resources/Location/GeocodePoint/Latitude");
+      String latitude = (String)expr.evaluate(document, XPathConstants.STRING);
+      expr = xpath.compile(
+               "//ResourceSets/ResourceSet/Resources/Location/GeocodePoint/Longitude");
+      String longitude = (String)expr.evaluate(document, XPathConstants.STRING);
+      return new String[] {latitude, longitude};
+    } else {
+        throw new Exception("Error from the AP");
     }
-    return null;
   }
 
   /**
