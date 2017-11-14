@@ -11,7 +11,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,10 +59,23 @@ public class MapperGui extends JPanel implements MapperListener {
   /**
    * Constructor for the GUI.
    */
-  public MapperGui() {
+  public MapperGui(final List<DataPlugin> datapluginsL,
+                   final List<VisualPlugin> visualpluginsL) {
     frame = new JFrame("Mapper");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setPreferredSize(new Dimension(width, height));
+
+    framework = new MapperFramework();
+    framework.registerFrameworkListener(this);
+
+    dataplugins = datapluginsL;
+    visualplugins = visualpluginsL;
+    for (DataPlugin plugin : dataplugins) {
+      framework.registerDataPlugin(plugin);
+    }
+    for (VisualPlugin plugin : visualplugins) {
+      framework.registerVisualPlugin(plugin);
+    }
 
     // Set-up the menu bar.
     JMenu fileMenu = new JMenu(MENU_TITLE);
@@ -95,7 +107,17 @@ public class MapperGui extends JPanel implements MapperListener {
               "Select a data plugin", "Taking data...",
               JOptionPane.QUESTION_MESSAGE, null, availablePlugins,
               availablePlugins[0]);
-      //TODO: Take in data
+
+      if (name != null) {
+        framework.chooseDataPlugin(name);
+
+        String source = (String) JOptionPane.showInputDialog(awesome,
+                "Enter source of data", "Using " + name,
+                JOptionPane.INFORMATION_MESSAGE);
+        framework.enterDataSet("Name", "Subject", source);
+
+        //TODO: Response message
+      }
     });
     menu.add(newDatasetMenuItem);
 
@@ -105,9 +127,12 @@ public class MapperGui extends JPanel implements MapperListener {
       String[] availableDatasets = framework.datasets();
       //TODO: Check for 0
       String name = (String) JOptionPane.showInputDialog(awesome,
-              "Select a data plugin", "Taking data...",
+              "Remove a data plugin", "Removing data...",
               JOptionPane.QUESTION_MESSAGE, null, availableDatasets,
               availableDatasets[0]);
+      if (name != null) {
+
+      }
     });
     menu.add(removeDatasetMenuItem);
 
