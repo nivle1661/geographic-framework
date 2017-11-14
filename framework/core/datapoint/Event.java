@@ -36,6 +36,15 @@ public class Event implements Comparable<Event> {
   /** Longitude of the event. */
   public final double longitude;
 
+  /** Boundary of South Latitude of the event. */
+  public final double southLatitude;
+  /** Boundary of North Latitude of the event. */
+  public final double northLatitude;
+  /** Boundary of West Longitude of the event. */
+  public final double westLongitude;
+  /** Boundary of East Longitude of the event. */
+  public final double eastLongitude;
+
   /** Keywords of the event. */
   public final List<String> keywords;
 
@@ -77,7 +86,7 @@ public class Event implements Comparable<Event> {
             + "&maxResults=1"
             + "&o=xml"
             + "&key=AoM6SIKHt1RS8tAZdnN7dNfrPcW-E8sPXFjPMNEOH2_oqoxNI7nPG22Dk4-geIgH";
-    System.out.println("URL : "+api);
+    System.out.println("URL : " + api);
     URL url = new URL(api);
     HttpURLConnection httpConnection = (HttpURLConnection)url.openConnection();
     httpConnection.setRequestMethod("GET");
@@ -86,20 +95,42 @@ public class Event implements Comparable<Event> {
     httpConnection.connect();
     responseCode = httpConnection.getResponseCode();
     if (responseCode == 200) {
-      DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();;
+      DocumentBuilder builder =
+              DocumentBuilderFactory.newInstance().newDocumentBuilder();
       Document document = builder.parse(httpConnection.getInputStream());
       XPathFactory xPathfactory = XPathFactory.newInstance();
       XPath xpath = xPathfactory.newXPath();
       XPathExpression expr;
       expr = xpath.compile(
-               "//ResourceSets/ResourceSet/Resources/Location/GeocodePoint/Latitude");
+              "//ResourceSets/ResourceSet/Resources/Location/GeocodePoint/"
+                      + "Latitude");
       String latitude = (String)expr.evaluate(document, XPathConstants.STRING);
       expr = xpath.compile(
-               "//ResourceSets/ResourceSet/Resources/Location/GeocodePoint/Longitude");
+               "//ResourceSets/ResourceSet/Resources/Location/GeocodePoint/"
+                      + "Longitude");
       String longitude = (String)expr.evaluate(document, XPathConstants.STRING);
-      return new String[] {latitude, longitude};
+
+      expr = xpath.compile(
+              "//ResourceSets/ResourceSet/Resources/Location/BoundingBox/"
+                      + "SouthLatitude");
+      String southLatitude = (String)expr.evaluate(document, XPathConstants.STRING);
+      expr = xpath.compile(
+              "//ResourceSets/ResourceSet/Resources/Location/BoundingBox/"
+                      + "NorthLatitude");
+      String northLatitude = (String)expr.evaluate(document, XPathConstants.STRING);
+      expr = xpath.compile(
+              "//ResourceSets/ResourceSet/Resources/Location/BoundingBox/"
+                      + "WestLongitude");
+      String westLongitude = (String)expr.evaluate(document, XPathConstants.STRING);
+      expr = xpath.compile(
+              "//ResourceSets/ResourceSet/Resources/Location/BoundingBox/"
+                      + "EastLongitude");
+      String eastLongitude = (String)expr.evaluate(document, XPathConstants.STRING);
+
+      return new String[] {latitude, longitude,
+              southLatitude, northLatitude, westLongitude, eastLongitude};
     } else {
-        throw new Exception("Error from the AP");
+        throw new Exception("Error from the API");
     }
   }
 
@@ -107,6 +138,7 @@ public class Event implements Comparable<Event> {
    * Sole constructor for Event.
    * Accepts time only as MM/DD/YYYY format currently. Will change to accept
    * month day, year.
+   * ADDED: MM/DD/YYYY HOUR:MINUTE
    */
   public Event(final ClientEvent event) {
     keywords = event.keywords;
@@ -123,18 +155,33 @@ public class Event implements Comparable<Event> {
     if (latlong == null) {
       latitude = 500;
       longitude = 500;
+      southLatitude = 500;
+      northLatitude = -500;
+      westLongitude = 500;
+      eastLongitude = -500;
     } else {
       latitude = Double.parseDouble(latlong[0]);
       longitude = Double.parseDouble(latlong[1]);
+      southLatitude = Double.parseDouble(latlong[2]);
+      northLatitude = Double.parseDouble(latlong[3]);
+      westLongitude = Double.parseDouble(latlong[4]);
+      eastLongitude = Double.parseDouble(latlong[5]);
     }
 
-    String[] temp = event.date.split("/");
-    int year = Integer.parseInt(temp[2]);
-    int month = Integer.parseInt(temp[1]);
-    int day = Integer.parseInt(temp[0]);
+    String[] temp = event.date.split("\\s+");
+
+    String[] temp1 = temp[0].split("/");
+    int year = Integer.parseInt(temp1[2]);
+    int month = Integer.parseInt(temp1[1]);
+    int day = Integer.parseInt(temp1[0]);
 
     Calendar c = Calendar.getInstance();
-    c.set(year, month, day, 12, 0);
+    if (temp.length == 1) {
+      c.set(year, month, day, 12, 0);
+    } else {
+      String[] temp2 = temp[1].split(":");
+      c.set(year, month, day, Integer.parseInt(temp2[0]), Integer.parseInt(temp2[1]));
+    }
     time = c.getTime();
   }
 
