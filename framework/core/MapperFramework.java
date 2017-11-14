@@ -26,10 +26,17 @@ public class MapperFramework {
    * Sole constructor for the framework.
    */
   public MapperFramework() {
-    listener = new MapperGui();
     dataplugins = new ArrayList<>();
     visualplugins = new ArrayList<>();
     datasets = new ArrayList<>();
+  }
+
+  /**
+   * Registers framework listener
+   * @param listenerL to register
+   */
+  public void registerFrameworkListener(final MapperListener listenerL) {
+    listener = listenerL;
   }
 
   /**
@@ -103,5 +110,13 @@ public class MapperFramework {
       availableDatasets[i] = datasets.get(i).toString();
     }
     return availableDatasets;
+  }
+
+  /**
+   * Returns list of data plugins.
+   * @return list of data plugins
+   */
+  public List<DataPlugin> getDataplugins() {
+    return dataplugins;
   }
 }
