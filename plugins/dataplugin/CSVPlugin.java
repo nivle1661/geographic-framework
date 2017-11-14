@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -55,16 +56,14 @@ public class CSVPlugin implements DataPlugin {
    */
   @Override
   public boolean openConnection(String arg) {
-    ClassLoader classLoader = getClass().getClassLoader();
-    File file = new File(classLoader.getResource(arg).getFile());
-
     try {
-      input = new BufferedReader((new FileReader(file)));
+      input = new BufferedReader(new
+              InputStreamReader(getClass().getClassLoader().getResourceAsStream(arg)));
       input.readLine();
     } catch (IOException e) {
       e.printStackTrace();
     }
-    return input == null;
+    return input != null;
   }
 
   /**

@@ -11,7 +11,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import java.awt.CardLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,10 +59,23 @@ public class MapperGui extends JPanel implements MapperListener {
   /**
    * Constructor for the GUI.
    */
-  public MapperGui() {
+  public MapperGui(final List<DataPlugin> datapluginsL,
+                   final List<VisualPlugin> visualpluginsL) {
     frame = new JFrame("Mapper");
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     frame.setPreferredSize(new Dimension(width, height));
+
+    framework = new MapperFramework();
+    framework.registerFrameworkListener(this);
+
+    dataplugins = datapluginsL;
+    visualplugins = visualpluginsL;
+    for (DataPlugin plugin : dataplugins) {
+      framework.registerDataPlugin(plugin);
+    }
+    for (VisualPlugin plugin : visualplugins) {
+      framework.registerVisualPlugin(plugin);
+    }
 
     // Set-up the menu bar.
     JMenu fileMenu = new JMenu(MENU_TITLE);
@@ -86,23 +98,39 @@ public class MapperGui extends JPanel implements MapperListener {
 
     newDatasetMenuItem = new JMenuItem(MENU_NEW_DATASET);
     newDatasetMenuItem.setMnemonic(KeyEvent.VK_N);
-    newDatasetMenuItem.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent event) {
-        String[] typeValues = {"Letter tile", "Special tile"};
-        String name = (String) JOptionPane.showInputDialog(awesome,
-                "Select type of tile to place", "Placing tile...",
-                JOptionPane.QUESTION_MESSAGE, null, typeValues,
-                typeValues[0]);
+    newDatasetMenuItem.addActionListener(event -> {
+      String[] availablePlugins = new String[dataplugins.size()];
+      for (int i = 0; i < dataplugins.size(); i++) {
+        availablePlugins[i] = dataplugins.get(i).toString();
+      }
+      String name = (String) JOptionPane.showInputDialog(awesome,
+              "Select a data plugin", "Taking data...",
+              JOptionPane.QUESTION_MESSAGE, null, availablePlugins,
+              availablePlugins[0]);
+
+      if (name != null) {
+        framework.chooseDataPlugin(name);
+
+        String source = (String) JOptionPane.showInputDialog(awesome,
+                "Enter source of data", "Using " + name,
+                JOptionPane.INFORMATION_MESSAGE);
+        framework.enterDataSet("Name", "Subject", source);
+
+        //TODO: Response message
       }
     });
     menu.add(newDatasetMenuItem);
 
     removeDatasetMenuItem = new JMenuItem(MENU_REMOVE_DATASET);
     removeDatasetMenuItem.setMnemonic(KeyEvent.VK_N);
-    removeDatasetMenuItem.addActionListener(new ActionListener() {
-      @Override
-      public void actionPerformed(final ActionEvent event) {
+    removeDatasetMenuItem.addActionListener(event -> {
+      String[] availableDatasets = framework.datasets();
+      //TODO: Check for 0
+      String name = (String) JOptionPane.showInputDialog(awesome,
+              "Remove a data plugin", "Removing data...",
+              JOptionPane.QUESTION_MESSAGE, null, availableDatasets,
+              availableDatasets[0]);
+      if (name != null) {
 
       }
     });

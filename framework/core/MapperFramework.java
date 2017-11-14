@@ -26,10 +26,17 @@ public class MapperFramework {
    * Sole constructor for the framework.
    */
   public MapperFramework() {
-    listener = new MapperGui();
     dataplugins = new ArrayList<>();
     visualplugins = new ArrayList<>();
     datasets = new ArrayList<>();
+  }
+
+  /**
+   * Registers framework listener
+   * @param listenerL to register
+   */
+  public void registerFrameworkListener(final MapperListener listenerL) {
+    listener = listenerL;
   }
 
   /**
@@ -78,7 +85,7 @@ public class MapperFramework {
    * @param name for the dataset
    * @param source of data
    */
-  public void getDataSet(final String name, final String subject,
+  public void enterDataSet(final String name, final String subject,
                          final String source) {
     DataSet newDataSet = new DataSet(name);
     currentDataplugin.setSubject(subject);
@@ -91,5 +98,25 @@ public class MapperFramework {
     currentDataplugin.closeConnection();
 
     datasets.add(newDataSet);
+  }
+
+  /**
+   * Returns array of the names of datasets.
+   * @return array of the names of datasets
+   */
+  public String[] datasets() {
+    String[] availableDatasets = new String[datasets.size()];
+    for (int i = 0; i < datasets.size(); i++) {
+      availableDatasets[i] = datasets.get(i).toString();
+    }
+    return availableDatasets;
+  }
+
+  /**
+   * Returns list of data plugins.
+   * @return list of data plugins
+   */
+  public List<DataPlugin> getDataplugins() {
+    return dataplugins;
   }
 }
