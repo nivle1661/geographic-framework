@@ -106,10 +106,10 @@ public class DataSet {
       List<String> temp = newEvent.keywords;
       String location = newEvent.location;
       events.add(newEvent);
-      minLat = Math.min(newEvent.latitude, minLat);
-      maxLat = Math.max(newEvent.latitude, maxLat);
-      minLong = Math.min(newEvent.longitude, minLong);
-      maxLong = Math.max(newEvent.longitude, maxLong);
+      minLat = Math.min(newEvent.southLatitude, minLat);
+      maxLat = Math.max(newEvent.northLatitude, maxLat);
+      minLong = Math.min(newEvent.westLongitude, minLong);
+      maxLong = Math.max(newEvent.eastLongitude, maxLong);
 
       //Incrementing values for frequency counts
       for (String keyword : temp) {
