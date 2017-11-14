@@ -64,7 +64,7 @@ public class CSVPlugin implements DataPlugin {
     } catch (IOException e) {
       e.printStackTrace();
     }
-    return input == null;
+    return input != null;
   }
 
   /**
