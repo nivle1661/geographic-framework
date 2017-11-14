@@ -165,4 +165,13 @@ public class DataSet {
     return new DataSet(events, freqKeyword, freqLoc,
                        minLat, maxLat, minLong, maxLong);
   }
+
+  /**
+   * Returns name of data plugin.
+   * @return name
+   */
+  @Override
+  public String toString() {
+    return name;
+  }
 }
