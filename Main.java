@@ -19,7 +19,7 @@ public class Main {
   }
 
   /**
-   * The main function which runs the scrabble game.
+   * The main function which runs the framework.
    * @param args command arguments.
    */
   public static void main(final String[] args) {
@@ -39,7 +39,7 @@ public class Main {
   }
 
   /**
-   * Creates the game GUI and setup.
+   * Creates the framework GUI and setup.
    */
   private static void createAndShowFramework() {
     JFrame frame = new JFrame("Mapper");

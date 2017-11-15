@@ -107,6 +107,11 @@ public class SetListPlugin implements DataPlugin{
 
     }
 
+    @Override
+    public String toString() {
+        return "Set List Loader";
+    }
+
     private class MyHandler extends DefaultHandler{
 
         private List<ClientEvent> events = null;
