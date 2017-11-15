@@ -11,6 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
@@ -233,12 +234,18 @@ public class MapperGui extends JPanel {
         framework.chooseVisualPlugin(plugin);
 
         JTextField[] datasets = new JTextField[framework.datasets().length];
-        Object[] message = new Object[datasets.length * 2];
+        Object[] message = new Object[datasets.length * 2 + 1];
+        JTextArea header = new JTextArea("Assign priorities to the datasets used.\n"
+          + "For unused datasets, leave blank."
+          + "If there is no preference or nonapplicable, assign 0 as default.");
+        header.setEditable(false);
+        message[0] = header;
+
         for (int i = 0; i < datasets.length; i++) {
-          message[i * 2] = framework.datasets()[i] + "'s priority: ";
+          message[i * 2 + 1] = framework.datasets()[i] + "'s priority: ";
 
           datasets[i] = new JTextField();
-          message[i * 2 + 1] = datasets[i];
+          message[i * 2 + 2] = datasets[i];
         }
         int option = JOptionPane.showConfirmDialog(awesome,
                 message, "Using " + plugin,
