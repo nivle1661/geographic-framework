@@ -139,6 +139,9 @@ public class Event implements Comparable<Event> {
                       + "EastLongitude");
       String eastLongitude = (String) expr.evaluate(document, cons);
 
+      System.out.println(latitude + ", " + longitude + " | "
+        + southLatitude + " " + northLatitude
+        + " " + westLongitude + " " + eastLongitude);
       return new String[] {latitude, longitude,
               southLatitude, northLatitude, westLongitude, eastLongitude};
     } else {

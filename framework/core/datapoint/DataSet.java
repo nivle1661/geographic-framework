@@ -34,6 +34,9 @@ public class DataSet {
   /** Maximum Latitude. */
   private double maxLat;
 
+  /** Convert from millesconds to hours. */
+  private final double mille = 60 * 60 * 1000;
+
   /**
    * Constructor of empty DataSet.
    * @param nameL name of dataset
@@ -151,6 +154,7 @@ public class DataSet {
       }
     }
     Collections.sort(events);
+    System.out.println(events.size());
 
     return new DataSet(events, freqKeyword, freqLoc,
                        new double[]{minLat, maxLat},
@@ -186,15 +190,15 @@ public class DataSet {
       if (!okBefore) {
         Event tempL = result.get(j - 1);
         okBefore = speed
-                > distance(temp, tempL) / (temp.time.getTime()
-                                           - tempL.time.getTime());
+                > distance(temp, tempL) / ((temp.time.getTime()
+                                            - tempL.time.getTime()) / mille);
       }
-      boolean okAfter = (j == result.size() - 1);
-      if (!okBefore) {
+      boolean okAfter = (j == result.size() || j == result.size() - 1);
+      if (!okAfter) {
         Event tempL = result.get(j + 1);
-        okBefore = speed
-                > distance(temp, tempL) / (tempL.time.getTime()
-                                           - temp.time.getTime());
+        okAfter = speed
+                > distance(temp, tempL) / ((tempL.time.getTime()
+                                           - temp.time.getTime()) / mille);
       }
 
       if (okBefore && okAfter) {

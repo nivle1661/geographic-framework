@@ -2,8 +2,8 @@ package gui;
 
 import core.DataPlugin;
 import core.MapperFramework;
-import core.MapperListener;
 import core.VisualPlugin;
+import core.datapoint.DataSet;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -13,8 +13,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +20,7 @@ import java.util.List;
 /**
  * GUI for the Mapper Framework.
  */
-public class MapperGui extends JPanel implements MapperListener {
+public class MapperGui extends JPanel {
   /** Registered data plugins. */
   private List<DataPlugin> dataplugins;
   /** Registered visual plugins. */
@@ -50,9 +48,9 @@ public class MapperGui extends JPanel implements MapperListener {
   private static JMenuItem visualizeDatasetMenuItem;
 
   /** Width of the Frame. */
-  private final int width = 1250;
+  private final int width = 1000;
   /** Height of the Frame. */
-  private final int height = 950;
+  private final int height = 800;
 
   /** The parent JFrame window. */
   private final JFrame frame;
@@ -93,6 +91,8 @@ public class MapperGui extends JPanel implements MapperListener {
 
     initializeMenu();
     body = new JPanel();
+    body.setVisible(true);
+    frame.add(body);
 
     frame.pack();
     frame.setVisible(true);
@@ -188,6 +188,8 @@ public class MapperGui extends JPanel implements MapperListener {
     exitMenuItem.addActionListener(event -> System.exit(0));
     menu.add(exitMenuItem);
 
+    framework.defaultData();
+
     menuBar.add(menu);
     frame.setJMenuBar(menuBar);
   }
@@ -195,7 +197,6 @@ public class MapperGui extends JPanel implements MapperListener {
   /**
    * Updates the remove dataset listener.
    */
-  @Override
   public void updateDatasets() {
     JPanel awesome = this;
     removeDatasetMenuItem.removeActionListener(
@@ -243,22 +244,25 @@ public class MapperGui extends JPanel implements MapperListener {
                 message, "Using " + plugin,
                 JOptionPane.OK_CANCEL_OPTION);
         if (option == JOptionPane.OK_OPTION) {
+          List<Integer> updates = new ArrayList<>();
           for (int i = 0; i < datasets.length; i++) {
             String prior = datasets[i].getText();
-            List<Integer> updates = new ArrayList<Integer>();
             if (!prior.equals("")) {
               int priority = Integer.parseInt(prior);
               updates.add(i);
               updates.add(priority);
             }
+          }
+          System.out.println(updates);
 
-            if (updates.size() == 0) {
-              JOptionPane.showMessageDialog(new JFrame(),
-                      "No datasets selected!", "Error",
-                      JOptionPane.ERROR_MESSAGE);
-            } else {
-              framework.updateAndCombine(updates);
-            }
+          if (updates.size() == 0) {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "No datasets selected!", "Error",
+                    JOptionPane.ERROR_MESSAGE);
+          } else {
+            DataSet result = framework.updateAndCombine(updates);
+            JFrame frameL = framework.visualizeDataSet(result);
+            body.add(frameL);
           }
         }
       }

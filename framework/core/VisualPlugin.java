@@ -2,11 +2,11 @@ package core;
 
 import core.datapoint.DataSet;
 
-import javax.imageio.ImageReader;
+import javax.swing.JFrame;
 
 /** Common interface for visual plugins. */
 public interface VisualPlugin {
-  void initFigure(DataSet set);
-  void addData();
-  ImageReader getFinalFigure();
+  void initFigure();
+  void addData(DataSet set);
+  JFrame getFinalFigure();
 }
