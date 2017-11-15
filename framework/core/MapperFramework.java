@@ -91,7 +91,7 @@ public class MapperFramework {
     currentDataplugin.setSubject(subject);
 
     currentDataplugin.openConnection(source);
-    while(currentDataplugin.hasNext()) {
+    while (currentDataplugin.hasNext()) {
       ClientEvent clientEvent = currentDataplugin.getEvent();
       newDataSet.addEvent(clientEvent);
     }
@@ -110,5 +110,18 @@ public class MapperFramework {
       availableDatasets[i] = datasets.get(i).toString();
     }
     return availableDatasets;
+  }
+
+  /**
+   * Removes dataset with given name from the framework.
+   * @param name of dataset
+   */
+  public void removeDataset(final String name) {
+    for (DataSet dataset : datasets) {
+      if (datasets.toString().equals(name)) {
+        datasets.remove(dataset);
+        listener.updateDatasets();
+      }
+    }
   }
 }
