@@ -11,6 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -56,6 +57,9 @@ public class MapperGui extends JPanel implements MapperListener {
   /** Menu bar. */
   private JMenuBar menuBar;
 
+  /** Index of dataset. */
+  private int index;
+
   /**
    * Constructor for the GUI.
    */
@@ -86,6 +90,8 @@ public class MapperGui extends JPanel implements MapperListener {
 
     frame.pack();
     frame.setVisible(true);
+
+    index = 1;
   }
 
   /**
@@ -103,20 +109,43 @@ public class MapperGui extends JPanel implements MapperListener {
       for (int i = 0; i < dataplugins.size(); i++) {
         availablePlugins[i] = dataplugins.get(i).toString();
       }
-      String name = (String) JOptionPane.showInputDialog(awesome,
+      String plugin = (String) JOptionPane.showInputDialog(awesome,
               "Select a data plugin", "Taking data...",
               JOptionPane.QUESTION_MESSAGE, null, availablePlugins,
               availablePlugins[0]);
 
-      if (name != null) {
-        framework.chooseDataPlugin(name);
-
+      if (plugin != null) {
+        framework.chooseDataPlugin(plugin);
+        JTextField getName = new JTextField();
+        JTextField getSubject = new JTextField();
+        Object[] message = {
+                "Name:", getName,
+                "Subject:", getSubject,
+                "Source:"
+        };
         String source = (String) JOptionPane.showInputDialog(awesome,
-                "Enter source of data", "Using " + name,
+                message, "Using " + plugin,
                 JOptionPane.INFORMATION_MESSAGE);
-        framework.enterDataSet("Name", "Subject", source);
-
-        //TODO: Response message
+        try {
+          String name = getName.getText();
+          String subject = getSubject.getText();
+          boolean increment = false;
+          if (name.equals("")) {
+            name = "Dataset " + index;
+            increment = true;
+          }
+          if (subject.equals("")) {
+            subject = "Subject " + index;
+            increment = true;
+          }
+          framework.enterDataSet(name, subject, source);
+          System.out.println(name + " " + subject + " " + source);
+          if (increment) {
+            index++;
+          }
+        } catch (Exception e) {
+          JOptionPane.showMessageDialog(awesome, "Invalid source");
+        }
       }
     });
     menu.add(newDatasetMenuItem);
@@ -131,7 +160,7 @@ public class MapperGui extends JPanel implements MapperListener {
               JOptionPane.QUESTION_MESSAGE, null, availableDatasets,
               availableDatasets[0]);
       if (name != null) {
-
+        framework.removeDataset(name);
       }
     });
     menu.add(removeDatasetMenuItem);
@@ -154,5 +183,26 @@ public class MapperGui extends JPanel implements MapperListener {
 
     menuBar.add(menu);
     frame.setJMenuBar(menuBar);
+  }
+
+  /**
+   * Updates the remove dataset listener.
+   */
+  @Override
+  public void updateDatasets() {
+    JPanel awesome = this;
+    removeDatasetMenuItem.removeActionListener(
+            removeDatasetMenuItem.getActionListeners()[0]);
+    removeDatasetMenuItem.addActionListener(event -> {
+      String[] availableDatasets = framework.datasets();
+      //TODO: Check for 0
+      String name = (String) JOptionPane.showInputDialog(awesome,
+              "Remove a data plugin", "Removing data...",
+              JOptionPane.QUESTION_MESSAGE, null, availableDatasets,
+              availableDatasets[0]);
+      if (name != null) {
+        framework.removeDataset(name);
+      }
+    });
   }
 }
