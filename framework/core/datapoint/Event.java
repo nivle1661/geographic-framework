@@ -3,6 +3,7 @@ package core.datapoint;
 import core.ClientEvent;
 import org.w3c.dom.Document;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -53,6 +54,15 @@ public class Event implements Comparable<Event> {
   /** The priority of the event (OPTIONAL). */
   private int priority;
 
+  /** Earth's radius in miles. */
+  private static final int EARTH_RADIUS = 3959;
+  /** Maximum longitude/latitude. */
+  public static final int MAX_LATLONG = 180;
+  /** Default hour. */
+  private final int MIDDAY = 12;
+  /** OK connection. */
+  private static final int OK_CONNECTION = 200;
+
   /**
    * Returns the distance between two events based on longitude, latitude.
    * It's possible to do an API call, but might take too long.
@@ -61,71 +71,73 @@ public class Event implements Comparable<Event> {
    * @return distance between event1 and event2, in miles
    */
   public static double distance(final Event event1, final Event event2) {
-    double earthRadius = 3959; //miles
     double dLat = Math.toRadians(event2.latitude - event1.latitude);
-    double dLng = Math.toRadians(event2.longitude -event1.longitude);
-    double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(Math.toRadians(event1.latitude))
+    double dLng = Math.toRadians(event2.longitude - event1.longitude);
+    double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+            + Math.cos(Math.toRadians(event1.latitude))
                     * Math.cos(Math.toRadians(event2.latitude))
                     * Math.sin(dLng / 2) * Math.sin(dLng / 2);
     double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    return (earthRadius * c);
+    return (EARTH_RADIUS * c);
   }
 
   /**
-   * Gets the latitude and longitude positions of an address using google maps API
-   * @param address
+   * Gets the latitude and longitude positions of an address using BING maps
+   * API.
+   * @param address of source
    * @return latitude and longitude
-   * @throws Exception
+   * @throws Exception excpetion
    */
-  public static String[] getLatLongPositions(final String address) throws Exception
-  {
+  private static String[] getLatLongPositions(final String address)
+          throws Exception {
     int responseCode = 0;
     String api = "http://dev.virtualearth.net/REST/v1/Locations?query="
-            + URLEncoder.encode(address, "UTF-8")
-            + "&maxResults=1"
-            + "&o=xml"
-            + "&key=AoM6SIKHt1RS8tAZdnN7dNfrPcW-E8sPXFjPMNEOH2_oqoxNI7nPG22Dk4-geIgH";
+     + URLEncoder.encode(address, "UTF-8")
+     + "&maxResults=1"
+     + "&o=xml"
+     + "&key=AoM6SIKHt1RS8tAZdnN7dNfrPcW-E8sPXFjPMNEOH2_oqoxNI7nPG22Dk4-geIgH";
     System.out.println("URL : " + api);
     URL url = new URL(api);
-    HttpURLConnection httpConnection = (HttpURLConnection)url.openConnection();
+    HttpURLConnection httpConnection = (HttpURLConnection) url.openConnection();
     httpConnection.setRequestMethod("GET");
     httpConnection.setRequestProperty("Accept", "application/xml");
 
     httpConnection.connect();
     responseCode = httpConnection.getResponseCode();
-    if (responseCode == 200) {
+    if (responseCode == OK_CONNECTION) {
       DocumentBuilder builder =
               DocumentBuilderFactory.newInstance().newDocumentBuilder();
       Document document = builder.parse(httpConnection.getInputStream());
       XPathFactory xPathfactory = XPathFactory.newInstance();
       XPath xpath = xPathfactory.newXPath();
       XPathExpression expr;
+
+      QName cons = XPathConstants.STRING;
       expr = xpath.compile(
               "//ResourceSets/ResourceSet/Resources/Location/GeocodePoint/"
                       + "Latitude");
-      String latitude = (String)expr.evaluate(document, XPathConstants.STRING);
+      String latitude = (String) expr.evaluate(document, cons);
       expr = xpath.compile(
                "//ResourceSets/ResourceSet/Resources/Location/GeocodePoint/"
                       + "Longitude");
-      String longitude = (String)expr.evaluate(document, XPathConstants.STRING);
+      String longitude = (String) expr.evaluate(document, cons);
 
       expr = xpath.compile(
               "//ResourceSets/ResourceSet/Resources/Location/BoundingBox/"
                       + "SouthLatitude");
-      String southLatitude = (String)expr.evaluate(document, XPathConstants.STRING);
+      String southLatitude = (String) expr.evaluate(document, cons);
       expr = xpath.compile(
               "//ResourceSets/ResourceSet/Resources/Location/BoundingBox/"
                       + "NorthLatitude");
-      String northLatitude = (String)expr.evaluate(document, XPathConstants.STRING);
+      String northLatitude = (String) expr.evaluate(document, cons);
       expr = xpath.compile(
               "//ResourceSets/ResourceSet/Resources/Location/BoundingBox/"
                       + "WestLongitude");
-      String westLongitude = (String)expr.evaluate(document, XPathConstants.STRING);
+      String westLongitude = (String) expr.evaluate(document, cons);
       expr = xpath.compile(
               "//ResourceSets/ResourceSet/Resources/Location/BoundingBox/"
                       + "EastLongitude");
-      String eastLongitude = (String)expr.evaluate(document, XPathConstants.STRING);
+      String eastLongitude = (String) expr.evaluate(document, cons);
 
       return new String[] {latitude, longitude,
               southLatitude, northLatitude, westLongitude, eastLongitude};
@@ -139,6 +151,7 @@ public class Event implements Comparable<Event> {
    * Accepts time only as MM/DD/YYYY format currently. Will change to accept
    * month day, year.
    * ADDED: MM/DD/YYYY HOUR:MINUTE
+   * @param event input
    */
   public Event(final ClientEvent event) {
     keywords = event.keywords;
@@ -153,19 +166,19 @@ public class Event implements Comparable<Event> {
       e.printStackTrace();
     }
     if (latlong == null) {
-      latitude = 500;
-      longitude = 500;
-      southLatitude = 500;
-      northLatitude = -500;
-      westLongitude = 500;
-      eastLongitude = -500;
+      latitude = MAX_LATLONG;
+      longitude = MAX_LATLONG;
+      southLatitude = MAX_LATLONG;
+      northLatitude = -MAX_LATLONG;
+      westLongitude = MAX_LATLONG;
+      eastLongitude = -MAX_LATLONG;
     } else {
       latitude = Double.parseDouble(latlong[0]);
       longitude = Double.parseDouble(latlong[1]);
       southLatitude = Double.parseDouble(latlong[2]);
-      northLatitude = Double.parseDouble(latlong[3]);
-      westLongitude = Double.parseDouble(latlong[4]);
-      eastLongitude = Double.parseDouble(latlong[5]);
+      northLatitude = Double.parseDouble(latlong[2 + 1]);
+      westLongitude = Double.parseDouble(latlong[2 + 2]);
+      eastLongitude = Double.parseDouble(latlong[2 + 2 + 1]);
     }
 
     String[] temp = event.date.split("\\s+");
@@ -177,20 +190,21 @@ public class Event implements Comparable<Event> {
 
     Calendar c = Calendar.getInstance();
     if (temp.length == 1) {
-      c.set(year, month, day, 12, 0);
+      c.set(year, month, day, MIDDAY, 0);
     } else {
       String[] temp2 = temp[1].split(":");
-      c.set(year, month, day, Integer.parseInt(temp2[0]), Integer.parseInt(temp2[1]));
+      c.set(year, month, day, Integer.parseInt(temp2[0]),
+              Integer.parseInt(temp2[1]));
     }
     time = c.getTime();
   }
 
   /**
    * Sets the priority of the event.
-   * @param priority of event
+   * @param priorityL of event
    */
-  public void setPriority(final int priority) {
-    this.priority = priority;
+  public void setPriority(final int priorityL) {
+    this.priority = priorityL;
   }
 
   /**
@@ -202,7 +216,7 @@ public class Event implements Comparable<Event> {
   }
 
   /**
-   * Compares two events based on time
+   * Compares two events based on time.
    * @param o other event
    * @return comparison of times.
    */

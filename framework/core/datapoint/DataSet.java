@@ -5,10 +5,11 @@ import core.ClientEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static core.datapoint.Event.MAX_LATLONG;
 
 /** Holds all the event data from one connection from a dataplugin. */
 public class DataSet {
@@ -54,14 +55,14 @@ public class DataSet {
     freqLoc = new HashMap<>();
     freqKeyword = new HashMap<>();
 
-    minLat = 500;
-    minLong = 500;
-    maxLat = -500;
-    maxLat = 500;
+    minLat = MAX_LATLONG;
+    minLong = MAX_LATLONG;
+    maxLat = -MAX_LATLONG;
+    maxLat = MAX_LATLONG;
   }
 
   /**
-   * Constructs a dataset with already given fields
+   * Constructs a dataset with already given fields.
    * @param eventsL events
    * @param freqKeywordL keyword frequency map
    * @param freqLocL location frequency map
@@ -87,7 +88,7 @@ public class DataSet {
 
   /**
    * Sets a single priority for all events.
-   * @param priority
+   * @param priority of events
    */
   public void setPriority(final int priority) {
     for (Event event : events) {
@@ -113,10 +114,10 @@ public class DataSet {
 
       //Incrementing values for frequency counts
       for (String keyword : temp) {
-        int count = freqKeyword.containsKey(keyword) ? freqKeyword.get(keyword) : 0;
+        int count = freqKeyword.getOrDefault(keyword, 0);
         freqKeyword.put(keyword, count + 1);
       }
-      int count = freqLoc.containsKey(location) ? freqLoc.get(location) : 0;
+      int count = freqLoc.getOrDefault(location, 0);
       freqKeyword.put(location, count + 1);
     }
   }
@@ -133,8 +134,8 @@ public class DataSet {
    * @param datasets to combine
    */
   public static DataSet combineDatasets(final List<DataSet> datasets) {
-    double minLong = 500, maxLong = -500;
-    double minLat = 500, maxLat = -500;
+    double minLong = MAX_LATLONG, maxLong = -MAX_LATLONG;
+    double minLat = MAX_LATLONG, maxLat = -MAX_LATLONG;
 
     //TODO: Do this
     Map<String, Integer> freqKeyword = new HashMap<>();
@@ -152,11 +153,11 @@ public class DataSet {
       Set<String> tempLoc = dataset.freqLoc.keySet();
 
       for (String key : tempKey) {
-        int count = freqKeyword.containsKey(key) ? freqKeyword.get(key) : 0;
+        int count = freqKeyword.getOrDefault(key, 0);
         freqKeyword.put(key, count + dataset.freqKeyword.get(key));
       }
       for (String loc : tempLoc) {
-        int count = freqLoc.containsKey(loc) ? freqLoc.get(loc) : 0;
+        int count = freqLoc.getOrDefault(loc, 0);
         freqLoc.put(loc, count + dataset.freqLoc.get(loc));
       }
     }
