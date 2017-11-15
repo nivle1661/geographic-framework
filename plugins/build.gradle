@@ -2,3 +2,6 @@ apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'application'
 
+dependencies {
+	compile files('lib/java-json.jar')
+}
