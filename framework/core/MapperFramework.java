@@ -1,12 +1,11 @@
 package core;
 
 import core.datapoint.DataSet;
-import core.datapoint.Event;
-import gui.MapperGui;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/** Framework implementation. */
 public class MapperFramework {
   /** GUI listener. */
   private MapperListener listener;
@@ -32,7 +31,7 @@ public class MapperFramework {
   }
 
   /**
-   * Registers framework listener
+   * Registers framework listener.
    * @param listenerL to register
    */
   public void registerFrameworkListener(final MapperListener listenerL) {
@@ -57,7 +56,7 @@ public class MapperFramework {
 
   /**
    * Chooses a data plugin.
-   * @name of plugin
+   * @param name of plugin
    */
   public void chooseDataPlugin(final String name) {
     for (DataPlugin dataplugin : dataplugins) {
@@ -69,7 +68,7 @@ public class MapperFramework {
 
   /**
    * Chooses a visual plugin.
-   * @name of plugin
+   * @param name of plugin
    */
   public void chooseVisualPlugin(final String name) {
     for (VisualPlugin visualplugin : visualplugins) {
@@ -83,6 +82,7 @@ public class MapperFramework {
   /**
    * Starts taking in data from the chosen data plugin.
    * @param name for the dataset
+   * @param subject the who
    * @param source of data
    */
   public void enterDataSet(final String name, final String subject,
