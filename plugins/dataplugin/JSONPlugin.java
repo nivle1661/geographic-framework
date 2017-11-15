@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.ArrayList;
 import org.json.*;
 
-
 /**
  * JSONPlugin - DataPlugin that reads and parses data from a JSON file containing a JSON array of JSON 
  * Objects
