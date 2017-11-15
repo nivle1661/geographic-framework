@@ -18,7 +18,7 @@ import org.json.*;
  */
 public class JSONPlugin implements DataPlugin {
 	
-	/** at a minimum the JSON must contain allls of the following key words **/
+	/** at a minimum the JSON must contain all of the following key words **/
 	private static final String POPULATION_KEY = "quantity";
 	private static final String KEYWORDS_KEY = "keywords";
 	private static final String SUBJECT_KEY = "subject";
