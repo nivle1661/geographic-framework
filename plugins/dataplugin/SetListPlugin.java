@@ -114,7 +114,7 @@ public class SetListPlugin implements DataPlugin{
 
     private class MyHandler extends DefaultHandler{
 
-        private List<ClientEvent> events = null;
+        private List<ClientEvent> events = new ArrayList<>();
         private StringBuffer location;
         private List<String> songs;
         private String date;
