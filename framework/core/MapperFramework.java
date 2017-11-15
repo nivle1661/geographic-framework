@@ -111,12 +111,4 @@ public class MapperFramework {
     }
     return availableDatasets;
   }
-
-  /**
-   * Returns list of data plugins.
-   * @return list of data plugins
-   */
-  public List<DataPlugin> getDataplugins() {
-    return dataplugins;
-  }
 }
