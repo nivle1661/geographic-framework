@@ -219,10 +219,6 @@ public class MapperGui extends JPanel implements MapperListener {
             visualizeDatasetMenuItem.getActionListeners()[0]);
     visualizeDatasetMenuItem.addActionListener(event -> {
       String[] availablePlugins = new String[visualplugins.size()];
-      if (availablePlugins.length == 0) {
-        JOptionPane.showMessageDialog(new JFrame(), "No plugins to select!",
-                "Error", JOptionPane.ERROR_MESSAGE);
-      }
 
       for (int i = 0; i < visualplugins.size(); i++) {
         availablePlugins[i] = visualplugins.get(i).toString();

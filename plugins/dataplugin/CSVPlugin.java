@@ -56,7 +56,8 @@ public class CSVPlugin implements DataPlugin {
   public boolean openConnection(final String arg) {
     try {
       input = new BufferedReader(new
-              InputStreamReader(getClass().getClassLoader().getResourceAsStream(arg)));
+              InputStreamReader(getClass().getClassLoader().
+              getResourceAsStream(arg)));
       input.readLine();
     } catch (IOException e) {
       e.printStackTrace();
