@@ -183,7 +183,12 @@ public class Event implements Comparable<Event> {
 
     String[] temp = event.date.split("\\s+");
 
-    String[] temp1 = temp[0].split("/");
+    String[] temp1;
+    if (temp[0].contains("/")) {
+      temp1 = temp[0].split("/");
+    } else {
+      temp1 = temp[0].split("-");
+    }
     int year = Integer.parseInt(temp1[2]);
     int month = Integer.parseInt(temp1[1]);
     int day = Integer.parseInt(temp1[0]);
