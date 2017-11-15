@@ -98,6 +98,7 @@ public class MapperFramework {
     currentDataplugin.closeConnection();
 
     datasets.add(newDataSet);
+    listener.updateDatasets();
   }
 
   /**
@@ -123,5 +124,20 @@ public class MapperFramework {
         listener.updateDatasets();
       }
     }
+  }
+
+  /**
+   * Updates the priorities and combines given datasets.
+   * @param updates to combine
+   * @return combined datasets
+   */
+  public DataSet updateAndCombine(final List<Integer> updates) {
+    int numUpdates = updates.size() / 2;
+    List<DataSet> toCombine = new ArrayList<>();
+    for (int i = 0; i < numUpdates; i++) {
+      DataSet temp = datasets.get(updates.get(i * 2));
+      temp.setPriority(updates.get(i * 2 + 1));
+    }
+    return DataSet.combineDatasets(toCombine);
   }
 }
