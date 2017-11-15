@@ -2,3 +2,5 @@
 # Provide fully qualified class names here,
 # with one plugin per line.
 dataplugin.CSVPlugin
+dataplugin.JSONPlugin
+dataplugin.SetListPlugin
