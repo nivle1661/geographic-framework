@@ -3,3 +3,4 @@
 # with one plugin per line.
 dataplugin.CSVPlugin
 dataplugin.JSONPlugin
+dataplugin.SetListPlugin
