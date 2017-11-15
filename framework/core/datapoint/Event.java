@@ -10,11 +10,9 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -49,9 +47,9 @@ public class Event implements Comparable<Event> {
   /** Keywords of the event. */
   public final List<String> keywords;
 
-  /** How many people attended (OPTIONAL). */
+  /** How many people attended (OPTIONAL, DEFAULT = 0). */
   public final int quantity;
-  /** The priority of the event (OPTIONAL). */
+  /** The priority of the event (OPTIONAL, DEFAULT = 0). */
   private int priority;
 
   /** Earth's radius in miles. */
@@ -59,7 +57,7 @@ public class Event implements Comparable<Event> {
   /** Maximum longitude/latitude. */
   public static final int MAX_LATLONG = 180;
   /** Default hour. */
-  private final int MIDDAY = 12;
+  private final int midday = 12;
   /** OK connection. */
   private static final int OK_CONNECTION = 200;
 
@@ -148,8 +146,7 @@ public class Event implements Comparable<Event> {
 
   /**
    * Sole constructor for Event.
-   * Accepts time only as MM/DD/YYYY format currently. Will change to accept
-   * month day, year.
+   * Accepts time only as MM/DD/YYYY format or MM-DD-YYYY.
    * ADDED: MM/DD/YYYY HOUR:MINUTE
    * @param event input
    */
@@ -158,6 +155,7 @@ public class Event implements Comparable<Event> {
     location = event.location;
     subject = event.subject;
     quantity = event.quantity;
+    priority = 0;
 
     String[] latlong = null;
     try {
@@ -195,7 +193,7 @@ public class Event implements Comparable<Event> {
 
     Calendar c = Calendar.getInstance();
     if (temp.length == 1) {
-      c.set(year, month, day, MIDDAY, 0);
+      c.set(year, month, day, midday, 0);
     } else {
       String[] temp2 = temp[1].split(":");
       c.set(year, month, day, Integer.parseInt(temp2[0]),
@@ -228,5 +226,14 @@ public class Event implements Comparable<Event> {
   @Override
   public int compareTo(final Event o) {
     return time.compareTo(o.time);
+  }
+
+  /**
+   * Returns string representation (for debugging purposes).
+   * @return string representation
+   */
+  @Override
+  public String toString() {
+    return subject + " " + time + " " + priority;
   }
 }
