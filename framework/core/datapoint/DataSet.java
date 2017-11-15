@@ -100,9 +100,11 @@ public class DataSet {
       maxLong = Math.max(newEvent.eastLongitude, maxLong);
 
       //Incrementing values for frequency counts
-      for (String keyword : temp) {
-        int count = freqKeyword.getOrDefault(keyword, 0);
-        freqKeyword.put(keyword, count + 1);
+      if (temp != null) {
+        for (String keyword : temp) {
+          int count = freqKeyword.getOrDefault(keyword, 0);
+          freqKeyword.put(keyword, count + 1);
+        }
       }
       int count = freqLoc.getOrDefault(location, 0);
       freqKeyword.put(location, count + 1);

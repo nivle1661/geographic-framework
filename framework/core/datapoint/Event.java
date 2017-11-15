@@ -13,6 +13,8 @@ import javax.xml.xpath.XPathFactory;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -151,6 +153,12 @@ public class Event implements Comparable<Event> {
    * @param event input
    */
   public Event(final ClientEvent event) {
+    double eastLongitude1;
+    double westLongitude1;
+    double northLatitude1;
+    double southLatitude1;
+    double longitude1;
+    double latitude1;
     keywords = event.keywords;
     location = event.location;
     subject = event.subject;
@@ -163,22 +171,28 @@ public class Event implements Comparable<Event> {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    if (latlong == null) {
-      latitude = MAX_LATLONG;
-      longitude = MAX_LATLONG;
-      southLatitude = MAX_LATLONG;
-      northLatitude = -MAX_LATLONG;
-      westLongitude = MAX_LATLONG;
-      eastLongitude = -MAX_LATLONG;
-    } else {
-      latitude = Double.parseDouble(latlong[0]);
-      longitude = Double.parseDouble(latlong[1]);
-      southLatitude = Double.parseDouble(latlong[2]);
-      northLatitude = Double.parseDouble(latlong[2 + 1]);
-      westLongitude = Double.parseDouble(latlong[2 + 2]);
-      eastLongitude = Double.parseDouble(latlong[2 + 2 + 1]);
+    try {
+      latitude1 = Double.parseDouble(latlong[0]);
+      longitude1 = Double.parseDouble(latlong[1]);
+      southLatitude1 = Double.parseDouble(latlong[2]);
+      northLatitude1 = Double.parseDouble(latlong[2 + 1]);
+      westLongitude1 = Double.parseDouble(latlong[2 + 2]);
+      eastLongitude1 = Double.parseDouble(latlong[2 + 2 + 1]);
+    } catch (NumberFormatException e) {
+      latitude1 = MAX_LATLONG;
+      longitude1 = MAX_LATLONG;
+      southLatitude1 = MAX_LATLONG;
+      northLatitude1 = -MAX_LATLONG;
+      westLongitude1 = MAX_LATLONG;
+      eastLongitude1 = -MAX_LATLONG;
     }
 
+    eastLongitude = eastLongitude1;
+    westLongitude = westLongitude1;
+    northLatitude = northLatitude1;
+    southLatitude = southLatitude1;
+    longitude = longitude1;
+    latitude = latitude1;
     String[] temp = event.date.split("\\s+");
 
     String[] temp1;
@@ -188,7 +202,21 @@ public class Event implements Comparable<Event> {
       temp1 = temp[0].split("-");
     }
     int year = Integer.parseInt(temp1[2]);
-    int month = Integer.parseInt(temp1[1]);
+    int month;
+    try {
+      month = Integer.parseInt(temp1[1]);
+    } catch (NumberFormatException e) {
+      Date date = null;
+      try {
+        date = new SimpleDateFormat("MMMM").parse(temp1[1]);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        month = cal.get(Calendar.MONTH);
+      } catch (ParseException e1) {
+        month = midday / 2;
+        e1.printStackTrace();
+      }
+    }
     int day = Integer.parseInt(temp1[0]);
 
     Calendar c = Calendar.getInstance();

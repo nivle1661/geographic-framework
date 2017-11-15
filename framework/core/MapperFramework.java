@@ -85,7 +85,7 @@ public class MapperFramework {
    * @param subject the who
    * @param source of data
    */
-  public void enterDataSet(final String name, final String subject,
+  public DataSet enterDataSet(final String name, final String subject,
                          final String source) {
     DataSet newDataSet = new DataSet(name);
     currentDataplugin.setSubject(subject);
@@ -98,7 +98,8 @@ public class MapperFramework {
     currentDataplugin.closeConnection();
 
     datasets.add(newDataSet);
-    listener.updateDatasets();
+    return newDataSet;
+    //listener.updateDatasets();
   }
 
   /**

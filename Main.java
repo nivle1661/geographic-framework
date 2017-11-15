@@ -1,6 +1,10 @@
 import core.DataPlugin;
+import core.MapperFramework;
 import core.VisualPlugin;
+import core.datapoint.DataSet;
+import dataplugin.CSVPlugin;
 import gui.MapperGui;
+import visualplugin.RoutePlugin;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -47,6 +51,23 @@ public final class Main {
 
     List<DataPlugin> dataplugins = loadDataPlugins();
     List<VisualPlugin> visualplugins = loadVisualPlugins();
+
+    MapperFramework test = new MapperFramework();
+    test.registerDataPlugin(new CSVPlugin());
+    test.chooseDataPlugin(new CSVPlugin().toString());
+    DataSet t1 = test.enterDataSet("Dataset 1", "ExpertVagabond", "ExpertVagabond.csv");
+    DataSet t2 = test.enterDataSet("Dataset 2", "Kristenalana", "Kristenalana.csv");
+    DataSet t3 = test.enterDataSet("Dataset 3", "TravisBurke", "TravisBurkePhotography.csv");
+    List<DataSet> tester = new ArrayList<>();
+    tester.add(t1);
+    tester.add(t2);
+    tester.add(t3);
+    RoutePlugin k = new RoutePlugin();
+    try {
+      k.initFigure(DataSet.combineDatasets(tester));
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
 
     frame.add(new MapperGui(dataplugins, visualplugins));
   }
