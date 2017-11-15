@@ -4,8 +4,6 @@ import core.ClientEvent;
 import core.DataPlugin;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ public class CSVPlugin implements DataPlugin {
   private String subject;
 
   /**
-   * Creates a plugin for CSV files
+   * Creates a plugin for CSV files.
    */
   public CSVPlugin() {
     input = null;
@@ -33,11 +31,11 @@ public class CSVPlugin implements DataPlugin {
 
   /**
    * Set the subject of the plugin.
-   * @param subject
+   * @param subjectL of plugin
    */
   @Override
-  public void setSubject(String subject) {
-    this.subject = subject;
+  public void setSubject(final String subjectL) {
+    this.subject = subjectL;
   }
 
   /**
@@ -55,7 +53,7 @@ public class CSVPlugin implements DataPlugin {
    * @return connection succesful
    */
   @Override
-  public boolean openConnection(String arg) {
+  public boolean openConnection(final String arg) {
     try {
       input = new BufferedReader(new
               InputStreamReader(getClass().getClassLoader().getResourceAsStream(arg)));
@@ -75,7 +73,7 @@ public class CSVPlugin implements DataPlugin {
     String[] fields = nextLine.split(",");
 
     //Splits based on white spaces
-    String[] keywords = fields[3].split("\\s+");
+    String[] keywords = fields[2 + 1].split("\\s+");
     int quantity = Integer.parseInt(fields[2]);
     return new ClientEvent(new ArrayList<>(Arrays.asList(keywords)),
             fields[0], fields[1], subject, quantity);
