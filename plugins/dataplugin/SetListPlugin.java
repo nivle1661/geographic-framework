@@ -21,51 +21,76 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SetListPlugin implements DataPlugin{
+/**
+ * Implements a DataPlugin to get artist info from setlist.fm using its API.
+ */
+public class SetListPlugin implements DataPlugin {
 
 
-    /** Input reader. */
+    /**
+     * Input reader.
+     */
     private StringBuffer data;
 
-    /** Subject for the file. */
+    /**
+     * Subject for the file.
+     */
     private String subject;
-
+    /**
+     * List which contains all the events.
+     */
     private List<ClientEvent> events;
+    /**
+     * the number of total events.
+     */
     private int size;
 
     /**
-     * Creates a plugin for CSV files
+     * Creates a plugin for CSV files.
      */
     public SetListPlugin() {
         data = null;
         subject = null;
-        events= null;
+        events = null;
         size = 0;
     }
 
+    /**
+     * Setter for the name of the artist.
+     * @param subject1 - name of the artist
+     */
     @Override
-    public void setSubject(String subject) {
-        this.subject=subject;
+    public void setSubject(final String subject1) {
+        this.subject = subject1;
     }
 
+    /**
+     * Getter for the name of the artist
+     * @return subject - name of the artist
+     */
     @Override
     public String getSubject() {
         return subject;
     }
-    // 381086ea-f511-4aba-bdf9-71c753dc5077  for KDot
+
+    /**
+     * Opens the connection to the API and parses the XML data it returns
+     * @param arg - MBID of the artist you want to search
+     * @return true if successful
+     */
     @Override
     public boolean openConnection(String arg) {
-        String link="https://api.setlist.fm/rest/1.0/artist/"+arg+"/setlists?p=1";
+        String link = "https://api.setlist.fm/rest/1.0/artist/" + arg + "/setlists?p=1";
         try {
-            URL url=new URL(link);
+            URL url = new URL(link);
             try {
                 HttpURLConnection con = (HttpURLConnection) url.openConnection();
-                con.setRequestProperty("x-api-key", "dd4e0a92-2fe5-4d4a-b8b9-74958f8e6d6b" );
-                BufferedReader input= new BufferedReader(new InputStreamReader(con.getInputStream()));
+                con.setRequestProperty("x-api-key", "dd4e0a92-2fe5-4d4a-b8b9-74958f8e6d6b");
+                BufferedReader input = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
                 String line;
-                data=new StringBuffer();
-                while ((line = input.readLine())!=null) {
+                data = new StringBuffer();
+                while ((line = input.readLine()) != null) {
                     data.append(line);
                 }
 
@@ -75,13 +100,13 @@ public class SetListPlugin implements DataPlugin{
                 SAXParser saxParser = saxParserFactory.newSAXParser();
                 MyHandler handler = new MyHandler();
                 saxParser.parse(is, handler);
-                events=handler.getEvents();
-                size=events.size();
+                events = handler.getEvents();
+                size = events.size();
 
-            } catch (IOException | ParserConfigurationException | SAXException e){
+            } catch (IOException | ParserConfigurationException | SAXException e) {
                 e.printStackTrace();
             }
-        } catch (MalformedURLException e){
+        } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
@@ -90,65 +115,106 @@ public class SetListPlugin implements DataPlugin{
 
     @Override
     public ClientEvent getEvent() {
-        if(events!=null){
-            if(size>0) size--;
+        if (events != null) {
+            if (size > 0) size--;
             return events.get(size);
         }
         return null;
     }
 
+    /**
+     * Checks if there are any events left to process
+     * @return true if there are events left
+     */
     @Override
     public boolean hasNext() {
-        return size!=0;
+        return size != 0;
     }
 
+    /**
+     * Closes the connection to the API if required
+     */
     @Override
     public void closeConnection() {
 
     }
 
+    /**
+     * Corrects string representation of the class
+     * @return - the correct string
+     */
     @Override
     public String toString() {
         return "Set List Loader";
     }
 
-    private class MyHandler extends DefaultHandler{
-
+    /**
+     * Class for parsing XML Data using SAXParser
+     */
+    private class MyHandler extends DefaultHandler {
+        /**
+         * the event list which needs to be generated
+         */
         private List<ClientEvent> events = new ArrayList<>();
+        /**
+         * location of the current event
+         */
         private StringBuffer location;
+        /**
+         * Songs played at the current event
+         */
         private List<String> songs;
+        /**
+         * Date of the current event
+         */
         private String date;
 
-        public List<ClientEvent> getEvents() {
+        /**
+         * Getter for the event list
+         * @return - event list
+         */
+        List<ClientEvent> getEvents() {
             return events;
         }
 
-
-
+        /**
+         *
+         * @param uri - the uri of the xml
+         * @param localName - local name
+         * @param qName - name of the header
+         * @param attributes - attribute values of the header
+         * @throws SAXException - in case API fiales
+         */
         @Override
         public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-            if(qName.equalsIgnoreCase("setlist")){
+            if (qName.equalsIgnoreCase("setlist")) {
                 date = attributes.getValue("eventDate");
-                location=new StringBuffer("");
-                songs=new ArrayList<>();
-            } else if(qName.equalsIgnoreCase("venue")){
+                location = new StringBuffer("");
+                songs = new ArrayList<>();
+            } else if (qName.equalsIgnoreCase("venue")) {
                 location.append(attributes.getValue("name"));
-            } else if(qName.equalsIgnoreCase("city")) {
+            } else if (qName.equalsIgnoreCase("city")) {
                 location.append(", ");
                 location.append(attributes.getValue("name"));
                 location.append(", ");
                 location.append(attributes.getValue("state"));
-            } else if(qName.equalsIgnoreCase("song")) {
+            } else if (qName.equalsIgnoreCase("song")) {
                 songs.add(attributes.getValue("name"));
             }
 
         }
 
-
+        /**
+         * Creates an adds a ClientEvent to the event list
+         * @param uri - the uri of the xml
+         * @param localName - local name
+         * @param qName - name of the header
+         * @throws SAXException - in case the API fails
+         */
         @Override
         public void endElement(String uri, String localName, String qName) throws SAXException {
-            if(qName.equalsIgnoreCase("setlist")){
-                events.add(new ClientEvent(songs,location.toString(), date, subject, 0));
+            if (qName.equalsIgnoreCase("setlist")) {
+                events.add(new ClientEvent(songs, location.toString(), date, subject, 0));
             }
         }
     }
