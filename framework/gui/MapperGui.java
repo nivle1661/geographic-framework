@@ -260,7 +260,6 @@ public class MapperGui extends JPanel {
               updates.add(priority);
             }
           }
-          System.out.println(updates);
 
           if (updates.size() == 0) {
             JOptionPane.showMessageDialog(new JFrame(),
