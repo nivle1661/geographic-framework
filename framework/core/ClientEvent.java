@@ -7,19 +7,19 @@ import java.util.List;
  */
 public class ClientEvent {
   /** Keywords for an event. */
-  public final List<String> keywords;
+  private final List<String> keywords;
 
   /** Location of the event. */
-  public final String location;
+  private final String location;
 
   /** Date of the event. */
-  public final String date;
+  private final String date;
 
   /** Subject of the event. */
-  public final String subject;
+  private final String subject;
 
   /** Number of people attending. */
-  public final int quantity;
+  private final int quantity;
 
   /**
    * The sole constructor for a client event.
@@ -39,5 +39,45 @@ public class ClientEvent {
     date = dateL;
     subject = subjectL;
     quantity = quantityL;
+  }
+
+  /**
+   * Returns subject.
+   * @return subject
+   */
+  public String getSubject() {
+    return subject;
+  }
+
+  /**
+   * Returns quantity.
+   * @return quantity
+   */
+  public int getQuantity() {
+    return quantity;
+  }
+
+  /**
+   * Returns date.
+   * @return date
+   */
+  public String getDate() {
+    return date;
+  }
+
+  /**
+   * Returns location.
+   * @return location
+   */
+  public String getLocation() {
+    return location;
+  }
+
+  /**
+   * Returns keywords.
+   * @return keywords
+   */
+  public List<String> getKeywords() {
+    return keywords;
   }
 }
