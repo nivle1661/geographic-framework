@@ -168,4 +168,12 @@ public class MapperFramework {
     }
     return null;
   }
+
+  /**
+   * Returns datasets (testing purposes only!).
+   * @return datasets
+   */
+  public List<DataSet> getDatasets() {
+    return datasets;
+  }
 }
