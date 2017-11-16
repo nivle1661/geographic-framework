@@ -57,16 +57,6 @@ public class MapperFramework {
   }
 
   /**
-   * Adds default data.
-   */
-  public void defaultData() {
-    chooseDataPlugin("Spreadsheet loader");
-    enterDataSet("Dataset 1", "ExpertVagabond", "ExpertVagabond.csv");
-    enterDataSet("Dataset 2", "Kristenalana", "Kristenalana.csv");
-    enterDataSet("Dataset 3", "TravisBurke", "TravisBurkePhotography.csv");
-  }
-
-  /**
    * Chooses a data plugin.
    * @param name of plugin
    */

@@ -165,6 +165,10 @@ public class MapperGui extends JPanel {
     removeDatasetMenuItem.setMnemonic(KeyEvent.VK_N);
     removeDatasetMenuItem.addActionListener(event -> {
       String[] availableDatasets = framework.datasets();
+      if (availableDatasets.length == 0) {
+        JOptionPane.showMessageDialog(new JFrame(), "No datasets to remove!",
+                "Error", JOptionPane.ERROR_MESSAGE);
+      }
       String name = (String) JOptionPane.showInputDialog(awesome,
               "Remove a data plugin", "Removing data...",
               JOptionPane.QUESTION_MESSAGE, null, availableDatasets,
@@ -187,8 +191,6 @@ public class MapperGui extends JPanel {
     exitMenuItem.setMnemonic(KeyEvent.VK_X);
     exitMenuItem.addActionListener(event -> System.exit(0));
     menu.add(exitMenuItem);
-
-    framework.defaultData();
 
     menuBar.add(menu);
     frame.setJMenuBar(menuBar);
