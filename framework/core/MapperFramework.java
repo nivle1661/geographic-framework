@@ -97,8 +97,8 @@ public class MapperFramework {
    * @param subject the who
    * @param source of data
    */
-  public void enterDataSet(final String name, final String subject,
-                           final String source) {
+  public synchronized void enterDataSet(final String name, final String subject,
+                                        final String source) {
     DataSet newDataSet = new DataSet(name);
     currentDataplugin.setSubject(subject);
 
@@ -110,7 +110,9 @@ public class MapperFramework {
     currentDataplugin.closeConnection();
 
     datasets.add(newDataSet);
-    listener.updateDatasets();
+    if (listener != null) {
+      listener.updateDatasets();
+    }
   }
 
   /**
@@ -129,11 +131,13 @@ public class MapperFramework {
    * Removes dataset with given name from the framework.
    * @param name of dataset
    */
-  public void removeDataset(final String name) {
+  public synchronized void removeDataset(final String name) {
     for (DataSet dataset : datasets) {
       if (dataset.toString().equals(name)) {
         datasets.remove(dataset);
-        listener.updateDatasets();
+        if (listener != null) {
+          listener.updateDatasets();
+        }
       }
     }
   }
