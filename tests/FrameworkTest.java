@@ -22,6 +22,7 @@ public class FrameworkTest {
   public void testPermutation() {
     MapperFramework f = new MapperFramework();
     List<DataPlugin> plugins = loadDataPlugins();
+    Assert.assertEquals(plugins.size(), 3);
     for (DataPlugin plugin : plugins) {
       f.registerDataPlugin(plugin);
     }
@@ -44,9 +45,9 @@ public class FrameworkTest {
     Assert.assertEquals(f.datasets().length, 4);
     f.removeDataset("Dataset 6");
     Assert.assertEquals(f.datasets().length, 4);
+
+    List<DataSet> datasets = f.getDatasets();
   }
-
-
 
   /**
    * Load plugins listed in META-INF/services/...
