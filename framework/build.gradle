@@ -4,4 +4,7 @@ apply plugin: 'application'
 
 dependencies {
 	compile files('lib/java-json.jar')
+	compile files('lib/JMapViewer.jar')
+	compile files('lib/xchart-3.5.0.jar')
+
 }
