@@ -3,20 +3,22 @@
 
 ## Data Plugins
 ###### SetListPlugin - 
-Name: Enter what you want the dataset to be called
-Subject: Name of the artist
-Source: go to https://musicbrainz.org/doc/MusicBrainz_Identifier and enter the name of the artist you want. 
-Click on the required one and copy the MBID from the details tab. It should look like this. e.g. 
-Kendrick Lamar - 381086ea-f511-4aba-bdf9-71c753dc5077
+Name: Enter what you want the dataset to be called <br />
+Subject: Name of the artist <br />
+Source: go to https://musicbrainz.org/doc/MusicBrainz_Identifier and enter the name of the artist you want. <br />
+Click on the required one and copy the MBID from the details tab. It should look like this. e.g. <br />
+Kendrick Lamar - 381086ea-f511-4aba-bdf9-71c753dc5077 <br />
 	   
+	 
 An MBID is required from the user as there are artists with duplicate names. MBID is a sure fire way to get the correct artist. 
 Furthermore the API for setlist.fm (data source) also prefers MBID making it a perfect key. The API returns data in XML form. 
 It is parsed using SAXParser data extraction is the only requirement, making it the optimal choice.
 
 ###### CSVPLugin -
-Name: Enter what you want the dataset to be called
-Subject: The who of the events
-Source: Resource file name, including .csv
+Name: Enter what you want the dataset to be called <br />
+Subject: The who of the events <br />
+Source: Resource file name, including .csv <br />
+
 
 Resource files have to have columns Location, Date, Quantity (optional), and Keywords. 
 
