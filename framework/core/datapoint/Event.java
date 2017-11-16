@@ -10,11 +10,11 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathFactory;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -49,9 +49,9 @@ public class Event implements Comparable<Event> {
   /** Keywords of the event. */
   public final List<String> keywords;
 
-  /** How many people attended (OPTIONAL). */
+  /** How many people attended (OPTIONAL, DEFAULT = 0). */
   public final int quantity;
-  /** The priority of the event (OPTIONAL). */
+  /** The priority of the event (OPTIONAL, DEFAULT = 0). */
   private int priority;
 
   /** Earth's radius in miles. */
@@ -59,9 +59,11 @@ public class Event implements Comparable<Event> {
   /** Maximum longitude/latitude. */
   public static final int MAX_LATLONG = 180;
   /** Default hour. */
-  private final int MIDDAY = 12;
+  private final int midday = 12;
   /** OK connection. */
   private static final int OK_CONNECTION = 200;
+  /** Tolerance for double equality. */
+  private static final double EPSILON = 0.001;
 
   /**
    * Returns the distance between two events based on longitude, latitude.
@@ -71,6 +73,13 @@ public class Event implements Comparable<Event> {
    * @return distance between event1 and event2, in miles
    */
   public static double distance(final Event event1, final Event event2) {
+    if (Math.abs(event1.latitude - MAX_LATLONG) < EPSILON
+        || Math.abs(event1.longitude - MAX_LATLONG) < EPSILON
+        || Math.abs(event2.latitude - MAX_LATLONG) < EPSILON
+        || Math.abs(event2.longitude - MAX_LATLONG) < EPSILON) {
+      return Double.MAX_VALUE;
+    }
+
     double dLat = Math.toRadians(event2.latitude - event1.latitude);
     double dLng = Math.toRadians(event2.longitude - event1.longitude);
     double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
@@ -139,6 +148,9 @@ public class Event implements Comparable<Event> {
                       + "EastLongitude");
       String eastLongitude = (String) expr.evaluate(document, cons);
 
+      System.out.println(latitude + ", " + longitude + " | "
+        + southLatitude + " " + northLatitude
+        + " " + westLongitude + " " + eastLongitude);
       return new String[] {latitude, longitude,
               southLatitude, northLatitude, westLongitude, eastLongitude};
     } else {
@@ -148,16 +160,22 @@ public class Event implements Comparable<Event> {
 
   /**
    * Sole constructor for Event.
-   * Accepts time only as MM/DD/YYYY format currently. Will change to accept
-   * month day, year.
+   * Accepts time only as MM/DD/YYYY format or MM-DD-YYYY.
    * ADDED: MM/DD/YYYY HOUR:MINUTE
    * @param event input
    */
   public Event(final ClientEvent event) {
+    double eastLongitude1;
+    double westLongitude1;
+    double northLatitude1;
+    double southLatitude1;
+    double longitude1;
+    double latitude1;
     keywords = event.keywords;
     location = event.location;
     subject = event.subject;
     quantity = event.quantity;
+    priority = 0;
 
     String[] latlong = null;
     try {
@@ -165,32 +183,57 @@ public class Event implements Comparable<Event> {
     } catch (Exception e) {
       e.printStackTrace();
     }
-    if (latlong == null) {
-      latitude = MAX_LATLONG;
-      longitude = MAX_LATLONG;
-      southLatitude = MAX_LATLONG;
-      northLatitude = -MAX_LATLONG;
-      westLongitude = MAX_LATLONG;
-      eastLongitude = -MAX_LATLONG;
-    } else {
-      latitude = Double.parseDouble(latlong[0]);
-      longitude = Double.parseDouble(latlong[1]);
-      southLatitude = Double.parseDouble(latlong[2]);
-      northLatitude = Double.parseDouble(latlong[2 + 1]);
-      westLongitude = Double.parseDouble(latlong[2 + 2]);
-      eastLongitude = Double.parseDouble(latlong[2 + 2 + 1]);
+    try {
+      latitude1 = Double.parseDouble(latlong[0]);
+      longitude1 = Double.parseDouble(latlong[1]);
+      southLatitude1 = Double.parseDouble(latlong[2]);
+      northLatitude1 = Double.parseDouble(latlong[2 + 1]);
+      westLongitude1 = Double.parseDouble(latlong[2 + 2]);
+      eastLongitude1 = Double.parseDouble(latlong[2 + 2 + 1]);
+    } catch (NumberFormatException e) {
+      latitude1 = MAX_LATLONG;
+      longitude1 = MAX_LATLONG;
+      southLatitude1 = MAX_LATLONG;
+      northLatitude1 = -MAX_LATLONG;
+      westLongitude1 = MAX_LATLONG;
+      eastLongitude1 = -MAX_LATLONG;
     }
 
+    eastLongitude = eastLongitude1;
+    westLongitude = westLongitude1;
+    northLatitude = northLatitude1;
+    southLatitude = southLatitude1;
+    longitude = longitude1;
+    latitude = latitude1;
     String[] temp = event.date.split("\\s+");
 
-    String[] temp1 = temp[0].split("/");
+    String[] temp1;
+    if (temp[0].contains("/")) {
+      temp1 = temp[0].split("/");
+    } else {
+      temp1 = temp[0].split("-");
+    }
     int year = Integer.parseInt(temp1[2]);
-    int month = Integer.parseInt(temp1[1]);
+    int month;
+    try {
+      month = Integer.parseInt(temp1[1]);
+    } catch (NumberFormatException e) {
+      Date date = null;
+      try {
+        date = new SimpleDateFormat("MMMM").parse(temp1[1]);
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        month = cal.get(Calendar.MONTH);
+      } catch (ParseException e1) {
+        month = midday / 2;
+        e1.printStackTrace();
+      }
+    }
     int day = Integer.parseInt(temp1[0]);
 
     Calendar c = Calendar.getInstance();
     if (temp.length == 1) {
-      c.set(year, month, day, MIDDAY, 0);
+      c.set(year, month, day, midday, 0);
     } else {
       String[] temp2 = temp[1].split(":");
       c.set(year, month, day, Integer.parseInt(temp2[0]),
@@ -223,5 +266,14 @@ public class Event implements Comparable<Event> {
   @Override
   public int compareTo(final Event o) {
     return time.compareTo(o.time);
+  }
+
+  /**
+   * Returns string representation (for debugging purposes).
+   * @return string representation
+   */
+  @Override
+  public String toString() {
+    return subject + " " + time + " " + priority;
   }
 }

@@ -1,6 +1,5 @@
 import core.DataPlugin;
 import core.VisualPlugin;
-import core.datapoint.Event;
 import gui.MapperGui;
 
 import javax.swing.JFrame;
@@ -11,7 +10,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
-public class Main {
+/** Main class for framework. */
+public final class Main {
   /**
    * Default constructor, never called.
    */
@@ -19,7 +19,7 @@ public class Main {
   }
 
   /**
-   * The main function which runs the scrabble game.
+   * The main function which runs the framework.
    * @param args command arguments.
    */
   public static void main(final String[] args) {
@@ -39,7 +39,7 @@ public class Main {
   }
 
   /**
-   * Creates the game GUI and setup.
+   * Creates the framework GUI and setup.
    */
   private static void createAndShowFramework() {
     JFrame frame = new JFrame("Mapper");
@@ -58,7 +58,8 @@ public class Main {
    */
   private static List<DataPlugin> loadDataPlugins() {
     List<DataPlugin> result = new ArrayList<>();
-    Iterator<DataPlugin> plugins = ServiceLoader.load(DataPlugin.class).iterator();
+    Iterator<DataPlugin> plugins = ServiceLoader.load(DataPlugin.class).
+            iterator();
     while (plugins.hasNext()) {
       DataPlugin plugin = plugins.next();
       result.add(plugin);
@@ -74,7 +75,8 @@ public class Main {
    */
   private static List<VisualPlugin> loadVisualPlugins() {
     List<VisualPlugin> result = new ArrayList<>();
-    Iterator<VisualPlugin> plugins = ServiceLoader.load(VisualPlugin.class).iterator();
+    Iterator<VisualPlugin> plugins = ServiceLoader.load(VisualPlugin.class).
+            iterator();
     while (plugins.hasNext()) {
       VisualPlugin plugin = plugins.next();
       result.add(plugin);

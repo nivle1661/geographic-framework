@@ -26,6 +26,8 @@ public class ClientEvent {
    * @param keywordsL keywords
    * @param locationL location
    * @param dateL date
+   * @param subjectL the who
+   * @param quantityL quantity measurement
    */
   public ClientEvent(final List<String> keywordsL,
                      final String locationL,
