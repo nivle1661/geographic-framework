@@ -235,8 +235,9 @@ public class MapperGui extends JPanel {
 
         JTextField[] datasets = new JTextField[framework.datasets().length];
         Object[] message = new Object[datasets.length * 2 + 1];
-        JTextArea header = new JTextArea("Assign priorities to the datasets used.\n"
-          + "For unused datasets, leave blank."
+        JTextArea header = new JTextArea(
+            "Assign priorities to the datasets used.\n"
+          + "For unused datasets, leave blank.\n"
           + "If there is no preference or nonapplicable, assign 0 as default.");
         header.setEditable(false);
         message[0] = header;
@@ -269,7 +270,8 @@ public class MapperGui extends JPanel {
           } else {
             DataSet result = framework.updateAndCombine(updates);
             JFrame frameL = framework.visualizeDataSet(result);
-            body.add(frameL);
+            frameL.pack();
+            frameL.setVisible(true);
           }
         }
       }

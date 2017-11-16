@@ -9,29 +9,39 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Image;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+/** Visualization plugin for optimal routes. */
 public class RoutePlugin implements VisualPlugin {
+  /** Google Static Maps API key. */
   private String api_key = "AIzaSyDersbd0-W5Js7hBKIPKOyQE5rKQ7hr4rA";
+  /** JFrame containing visualization. */
   private JFrame result;
 
+  /** Speeds to visualize for optimal route. */
   private final double[] speeds = new double[]{20, 60, 500};
+  /** Colors of the routes. */
   private final String[] colors = new String[]{"red", "blue", "yellow"};
 
+  /**
+   * Does nothing since we rely on the data to get the map.
+   */
   @Override
   public void initFigure() {
 
   }
 
+  /**
+   * Gets map with optimal routes via Google Static Maps API.
+   * @param set of data to be visualized
+   */
   @Override
   public void addData(final DataSet set) {
     StringBuilder api = new StringBuilder(
@@ -67,17 +77,37 @@ public class RoutePlugin implements VisualPlugin {
         panel.add(label, BorderLayout.CENTER);
 
         result = new JFrame();
-        result.add(panel);
+        result.setLayout(new BorderLayout());
+        JTextArea header = new JTextArea(" This visualization displays the"
+          + " optimal path based on priority of events.\n"
+          + " Red: 20mph\n"
+          + " Blue: 60mph\n"
+          + " Yellow: 500mph");
+        header.setEditable(false);
+        header.setBackground(Color.lightGray);
+        result.add(header, BorderLayout.NORTH);
+        result.add(panel, BorderLayout.CENTER);
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
+  /**
+   * Returns final visualization.
+   * @return JFrame containing final visualization
+   */
   @Override
   public JFrame getFinalFigure() {
-    result.pack();
-    result.setVisible(true);
     return result;
+  }
+
+  /**
+   * Returns string representation.
+   * @return string representation
+   */
+  @Override
+  public String toString() {
+    return "Route finder";
   }
 }
