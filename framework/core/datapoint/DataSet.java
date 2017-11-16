@@ -231,4 +231,12 @@ public class DataSet {
   public String toString() {
     return name;
   }
+
+  /**
+   * Returns events.
+   * @return events
+   */
+  public List<Event> getEvents() {
+    return events;
+  }
 }
