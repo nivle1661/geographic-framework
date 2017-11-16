@@ -56,7 +56,8 @@ public class CSVPlugin implements DataPlugin {
   public boolean openConnection(final String arg) {
     try {
       input = new BufferedReader(new
-              InputStreamReader(getClass().getClassLoader().getResourceAsStream(arg)));
+              InputStreamReader(getClass().getClassLoader().
+              getResourceAsStream(arg)));
       input.readLine();
     } catch (IOException e) {
       e.printStackTrace();
@@ -70,13 +71,38 @@ public class CSVPlugin implements DataPlugin {
    */
   @Override
   public ClientEvent getEvent() {
-    String[] fields = nextLine.split(",");
+    String location;
+    String[] fields;
+    if (nextLine.contains("\"")) {
+      int first = nextLine.indexOf("\"");
+      int second = nextLine.indexOf("\"", first + 1);
+      location = nextLine.substring(1, second);
+      fields = nextLine.substring(second + 2).split(",");
+    } else {
+      int index = nextLine.indexOf(",");
+      location = nextLine.substring(0, index);
+      fields = nextLine.substring(index + 1).split(",");
+    }
+    System.out.println(location);
 
     //Splits based on white spaces
-    String[] keywords = fields[2 + 1].split("\\s+");
-    int quantity = Integer.parseInt(fields[2]);
+    String[] keywords = null;
+    int quantity;
+    try {
+      quantity = Integer.parseInt(fields[1]);
+      if (fields.length > 2) {
+        keywords = fields[2].split("\\s+");
+      }
+    } catch (NumberFormatException e) {
+      quantity = 0;
+      keywords = fields[1].split("\\s+");
+    }
+
+    if (keywords == null) {
+      return new ClientEvent(null, location, fields[0], subject, quantity);
+    }
     return new ClientEvent(new ArrayList<>(Arrays.asList(keywords)),
-            fields[0], fields[1], subject, quantity);
+            location, fields[0], subject, quantity);
   }
 
   /**
@@ -94,7 +120,7 @@ public class CSVPlugin implements DataPlugin {
     } else {
       return false;
     }
-    return nextLine == null;
+    return nextLine != null;
   }
 
   /**

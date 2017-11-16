@@ -1,17 +1,18 @@
 package core;
 
+/** Common interface for data plugins. */
 public interface DataPlugin {
   /**
    * Set the subject of the plugin.
-   * @param subject
+   * @param subject of plugin
    */
-  public void setSubject(String subject);
+  void setSubject(String subject);
 
   /**
    * Gets the subject of the plugin.
    * @return subject of the plugin
    */
-  public String getSubject();
+  String getSubject();
 
   /**
    * Opens the connection with the source file/webpage (e.g.

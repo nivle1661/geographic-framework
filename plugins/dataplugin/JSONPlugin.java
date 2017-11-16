@@ -9,7 +9,9 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.List;
 import java.util.ArrayList;
-import org.json.*;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONException;
 
 /**
  * JSONPlugin - DataPlugin that reads and parses data from a JSON file containing a JSON array of JSON 
