@@ -54,8 +54,8 @@ public class RoutePlugin implements VisualPlugin {
 
       List<Event> route = set.getOptimalRoute(speeds[i]);
       for (Event event : route) {
-        api.append("|").append(String.format("%.4f", event.latitude))
-                .append(",").append(String.format("%.4f", event.longitude));
+        api.append("|").append(String.format("%.4f", event.getLatitude()))
+           .append(",").append(String.format("%.4f", event.getLongitude()));
       }
     }
     api.append("&key=").append(apikey);

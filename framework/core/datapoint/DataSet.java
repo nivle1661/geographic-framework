@@ -94,13 +94,13 @@ public class DataSet {
     Event newEvent = new Event(clientEvent);
 
     if (newEvent != null) {
-      List<String> temp = newEvent.keywords;
-      String location = newEvent.location;
+      List<String> temp = newEvent.getKeywords();
+      String location = newEvent.getLocation();
       events.add(newEvent);
-      minLat = Math.min(newEvent.southLatitude, minLat);
-      maxLat = Math.max(newEvent.northLatitude, maxLat);
-      minLong = Math.min(newEvent.westLongitude, minLong);
-      maxLong = Math.max(newEvent.eastLongitude, maxLong);
+      minLat = Math.min(newEvent.getLatitudeBound()[0], minLat);
+      maxLat = Math.max(newEvent.getLatitudeBound()[1], maxLat);
+      minLong = Math.min(newEvent.getLongitudeBound()[0], minLong);
+      maxLong = Math.max(newEvent.getLongitudeBound()[1], maxLong);
 
       //Incrementing values for frequency counts
       if (temp != null) {
@@ -169,7 +169,7 @@ public class DataSet {
     List<Event> priorityEvents = new ArrayList<>(events);
     Collections.sort(priorityEvents, (o1, o2) -> {
       if (o1.getPriority() == o2.getPriority()) {
-        return o1.time.compareTo(o2.time);
+        return o1.getTime().compareTo(o2.getTime());
       }
       return Integer.compare(o2.getPriority(), o1.getPriority());
     });
@@ -180,7 +180,7 @@ public class DataSet {
     while (priorityEvents.size() > 0) {
       Event temp = priorityEvents.remove(0);
       int j = result.size();
-      while ((j > 0) && result.get(j - 1).time.after(temp.time)) {
+      while ((j > 0) && result.get(j - 1).getTime().after(temp.getTime())) {
         j--;
       }
 
@@ -189,15 +189,15 @@ public class DataSet {
       if (!okBefore) {
         Event tempL = result.get(j - 1);
         okBefore = speed
-                > distance(temp, tempL) / ((temp.time.getTime()
-                                            - tempL.time.getTime()) / mille);
+              > distance(temp, tempL) / ((temp.getTime().getTime()
+                                          - tempL.getTime().getTime()) / mille);
       }
       boolean okAfter = (j == result.size() || j == result.size() - 1);
       if (!okAfter) {
         Event tempL = result.get(j + 1);
         okAfter = speed
-                > distance(temp, tempL) / ((tempL.time.getTime()
-                                           - temp.time.getTime()) / mille);
+              > distance(temp, tempL) / ((tempL.getTime().getTime()
+                                         - temp.getTime().getTime()) / mille);
       }
 
       if (okBefore && okAfter) {
@@ -207,10 +207,18 @@ public class DataSet {
     return result;
   }
 
+  /**
+   * Returns location frequency map.
+   * @return location frequency map
+   */
   public Map<String, Integer> getFreqLoc() {
     return freqLoc;
   }
 
+  /**
+   * Returns keyword frequency map.
+   * @return keyword frequency map
+   */
   public Map<String, Integer> getFreqKeyword() {
     return freqKeyword;
   }

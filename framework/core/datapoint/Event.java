@@ -24,33 +24,33 @@ import java.util.List;
  */
 public class Event implements Comparable<Event> {
   /** The who of the event. */
-  public final String subject;
+  private final String subject;
 
   /** Time of the event. */
-  public final Date time;
+  private final Date time;
 
   /** Location of the event as a string. */
-  public final String location;
+  private final String location;
 
   /** Latitude of the event. */
-  public final double latitude;
+  private final double latitude;
   /** Longitude of the event. */
-  public final double longitude;
+  private final double longitude;
 
   /** Boundary of South Latitude of the event. */
-  public final double southLatitude;
+  private final double southLatitude;
   /** Boundary of North Latitude of the event. */
-  public final double northLatitude;
+  private final double northLatitude;
   /** Boundary of West Longitude of the event. */
-  public final double westLongitude;
+  private final double westLongitude;
   /** Boundary of East Longitude of the event. */
-  public final double eastLongitude;
+  private final double eastLongitude;
 
   /** Keywords of the event. */
-  public final List<String> keywords;
+  private final List<String> keywords;
 
   /** How many people attended (OPTIONAL, DEFAULT = 0). */
-  public final int quantity;
+  private final int quantity;
   /** The priority of the event (OPTIONAL, DEFAULT = 0). */
   private int priority;
 
@@ -171,10 +171,10 @@ public class Event implements Comparable<Event> {
     double southLatitude1;
     double longitude1;
     double latitude1;
-    keywords = event.keywords;
-    location = event.location;
-    subject = event.subject;
-    quantity = event.quantity;
+    keywords = event.getKeywords();
+    location = event.getLocation();
+    subject = event.getSubject();
+    quantity = event.getQuantity();
     priority = 0;
 
     String[] latlong = null;
@@ -205,7 +205,7 @@ public class Event implements Comparable<Event> {
     southLatitude = southLatitude1;
     longitude = longitude1;
     latitude = latitude1;
-    String[] temp = event.date.split("\\s+");
+    String[] temp = event.getDate().split("\\s+");
 
     String[] temp1;
     if (temp[0].contains("/")) {
@@ -275,5 +275,61 @@ public class Event implements Comparable<Event> {
   @Override
   public String toString() {
     return subject + " " + time + " " + priority;
+  }
+
+  /**
+   * Returns longitude.
+   * @return longitude
+   */
+  public double getLongitude() {
+    return longitude;
+  }
+
+  /**
+   * Returns latitude.
+   * @return latitude
+   */
+  public double getLatitude() {
+    return latitude;
+  }
+
+  /**
+   * Returns list of keywords.
+   * @return list of keywords
+   */
+  public List<String> getKeywords() {
+    return keywords;
+  }
+
+  /**
+   * Returns location.
+   * @return location
+   */
+  public String getLocation() {
+    return location;
+  }
+
+  /**
+   * Returns latitude bounds.
+   * @return latitude bounds
+   */
+  public double[] getLatitudeBound() {
+    return new double[]{southLatitude, northLatitude};
+  }
+
+  /**
+   * Returns longitude bounds.
+   * @return longitude bounds
+   */
+  public double[] getLongitudeBound() {
+    return new double[]{westLongitude, eastLongitude};
+  }
+
+  /**
+   * Returns time.
+   * @return time
+   */
+  public Date getTime() {
+    return time;
   }
 }
