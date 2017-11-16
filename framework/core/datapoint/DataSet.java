@@ -208,6 +208,14 @@ public class DataSet {
     return result;
   }
 
+  public Map<String, Integer> getFreqLoc() {
+    return freqLoc;
+  }
+
+  public Map<String, Integer> getFreqKeyword() {
+    return freqKeyword;
+  }
+
   /**
    * Returns name of data plugin.
    * @return name

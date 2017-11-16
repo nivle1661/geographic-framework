@@ -2,3 +2,4 @@
 # Provide fully qualified class names here,
 # with one plugin per line.
 visualplugin.RoutePlugin
+visualplugin.BarChartPlugin
