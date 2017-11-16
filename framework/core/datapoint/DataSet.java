@@ -110,7 +110,7 @@ public class DataSet {
         }
       }
       int count = freqLoc.getOrDefault(location, 0);
-      freqKeyword.put(location, count + 1);
+      freqLoc.put(location, count + 1);
     }
   }
 
