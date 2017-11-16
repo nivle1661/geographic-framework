@@ -2,8 +2,8 @@ package gui;
 
 import core.DataPlugin;
 import core.MapperFramework;
+import core.MapperListener;
 import core.VisualPlugin;
-import core.datapoint.DataSet;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -11,17 +11,13 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- * GUI for the Mapper Framework.
- */
-public class MapperGui extends JPanel {
+public class MapperGui extends JPanel implements MapperListener {
   /** Registered data plugins. */
   private List<DataPlugin> dataplugins;
   /** Registered visual plugins. */
@@ -49,9 +45,9 @@ public class MapperGui extends JPanel {
   private static JMenuItem visualizeDatasetMenuItem;
 
   /** Width of the Frame. */
-  private final int width = 1000;
+  private final int width = 1250;
   /** Height of the Frame. */
-  private final int height = 800;
+  private final int height = 950;
 
   /** The parent JFrame window. */
   private final JFrame frame;
@@ -60,13 +56,8 @@ public class MapperGui extends JPanel {
   /** Menu bar. */
   private JMenuBar menuBar;
 
-  /** Index of dataset. */
-  private int index;
-
   /**
    * Constructor for the GUI.
-   * @param datapluginsL default data plugins
-   * @param visualpluginsL default visual plugins
    */
   public MapperGui(final List<DataPlugin> datapluginsL,
                    final List<VisualPlugin> visualpluginsL) {
@@ -92,13 +83,9 @@ public class MapperGui extends JPanel {
 
     initializeMenu();
     body = new JPanel();
-    body.setVisible(true);
-    frame.add(body);
 
     frame.pack();
     frame.setVisible(true);
-
-    index = 1;
   }
 
   /**
@@ -116,47 +103,20 @@ public class MapperGui extends JPanel {
       for (int i = 0; i < dataplugins.size(); i++) {
         availablePlugins[i] = dataplugins.get(i).toString();
       }
-      String plugin = (String) JOptionPane.showInputDialog(awesome,
+      String name = (String) JOptionPane.showInputDialog(awesome,
               "Select a data plugin", "Taking data...",
               JOptionPane.QUESTION_MESSAGE, null, availablePlugins,
               availablePlugins[0]);
 
-      if (plugin != null) {
-        framework.chooseDataPlugin(plugin);
-        JTextField getName = new JTextField();
-        JTextField getSubject = new JTextField();
-        JTextField getSource = new JTextField();
-        Object[] message = {
-                "Name:", getName,
-                "Subject:", getSubject,
-                "Source:", getSource
-        };
-        int option = JOptionPane.showConfirmDialog(awesome,
-                message, "Using " + plugin,
-                JOptionPane.OK_CANCEL_OPTION);
-        if (option == JOptionPane.OK_OPTION) {
-          try {
-            String name = getName.getText();
-            String subject = getSubject.getText();
-            String source = getSource.getText();
-            framework.enterDataSet(name, subject, source);
+      if (name != null) {
+        framework.chooseDataPlugin(name);
 
-            boolean increment = false;
-            if (name.equals("")) {
-              name = "Dataset " + index;
-              increment = true;
-            }
-            if (subject.equals("")) {
-              subject = "Subject " + index;
-              increment = true;
-            }
-            if (increment) {
-              index++;
-            }
-          } catch (Exception e) {
-            JOptionPane.showMessageDialog(awesome, "Invalid source");
-          }
-        }
+        String source = (String) JOptionPane.showInputDialog(awesome,
+                "Enter source of data", "Using " + name,
+                JOptionPane.INFORMATION_MESSAGE);
+        framework.enterDataSet("Name", "Subject", source);
+
+        //TODO: Response message
       }
     });
     menu.add(newDatasetMenuItem);
@@ -165,20 +125,24 @@ public class MapperGui extends JPanel {
     removeDatasetMenuItem.setMnemonic(KeyEvent.VK_N);
     removeDatasetMenuItem.addActionListener(event -> {
       String[] availableDatasets = framework.datasets();
+      //TODO: Check for 0
       String name = (String) JOptionPane.showInputDialog(awesome,
               "Remove a data plugin", "Removing data...",
               JOptionPane.QUESTION_MESSAGE, null, availableDatasets,
               availableDatasets[0]);
       if (name != null) {
-        framework.removeDataset(name);
+
       }
     });
     menu.add(removeDatasetMenuItem);
 
     visualizeDatasetMenuItem = new JMenuItem(MENU_VISUALIZE_DATASET);
     visualizeDatasetMenuItem.setMnemonic(KeyEvent.VK_N);
-    visualizeDatasetMenuItem.addActionListener(event -> {
-      return;
+    visualizeDatasetMenuItem.addActionListener(new ActionListener() {
+      @Override
+      public void actionPerformed(final ActionEvent event) {
+
+      }
     });
     menu.add(visualizeDatasetMenuItem);
 
@@ -188,92 +152,7 @@ public class MapperGui extends JPanel {
     exitMenuItem.addActionListener(event -> System.exit(0));
     menu.add(exitMenuItem);
 
-    framework.defaultData();
-
     menuBar.add(menu);
     frame.setJMenuBar(menuBar);
-  }
-
-  /**
-   * Updates the remove dataset listener.
-   */
-  public void updateDatasets() {
-    JPanel awesome = this;
-    removeDatasetMenuItem.removeActionListener(
-            removeDatasetMenuItem.getActionListeners()[0]);
-    removeDatasetMenuItem.addActionListener(event -> {
-      String[] availableDatasets = framework.datasets();
-      if (availableDatasets.length == 0) {
-        JOptionPane.showMessageDialog(new JFrame(), "No datasets to remove!",
-                "Error", JOptionPane.ERROR_MESSAGE);
-      }
-      String name = (String) JOptionPane.showInputDialog(awesome,
-              "Remove a data plugin", "Removing data...",
-              JOptionPane.QUESTION_MESSAGE, null, availableDatasets,
-              availableDatasets[0]);
-      if (name != null) {
-        framework.removeDataset(name);
-      }
-    });
-
-    visualizeDatasetMenuItem.removeActionListener(
-            visualizeDatasetMenuItem.getActionListeners()[0]);
-    visualizeDatasetMenuItem.addActionListener(event -> {
-      String[] availablePlugins = new String[visualplugins.size()];
-
-      for (int i = 0; i < visualplugins.size(); i++) {
-        availablePlugins[i] = visualplugins.get(i).toString();
-      }
-      String plugin = (String) JOptionPane.showInputDialog(awesome,
-              "Select a data plugin", "Taking data...",
-              JOptionPane.QUESTION_MESSAGE, null, availablePlugins,
-              availablePlugins[0]);
-
-      if (plugin != null) {
-        framework.chooseVisualPlugin(plugin);
-
-        JTextField[] datasets = new JTextField[framework.datasets().length];
-        Object[] message = new Object[datasets.length * 2 + 1];
-        JTextArea header = new JTextArea(
-            "Assign priorities to the datasets used.\n"
-          + "For unused datasets, leave blank.\n"
-          + "If there is no preference or nonapplicable, assign 0 as default.");
-        header.setEditable(false);
-        message[0] = header;
-
-        for (int i = 0; i < datasets.length; i++) {
-          message[i * 2 + 1] = framework.datasets()[i] + "'s priority: ";
-
-          datasets[i] = new JTextField();
-          message[i * 2 + 2] = datasets[i];
-        }
-        int option = JOptionPane.showConfirmDialog(awesome,
-                message, "Using " + plugin,
-                JOptionPane.OK_CANCEL_OPTION);
-        if (option == JOptionPane.OK_OPTION) {
-          List<Integer> updates = new ArrayList<>();
-          for (int i = 0; i < datasets.length; i++) {
-            String prior = datasets[i].getText();
-            if (!prior.equals("")) {
-              int priority = Integer.parseInt(prior);
-              updates.add(i);
-              updates.add(priority);
-            }
-          }
-          System.out.println(updates);
-
-          if (updates.size() == 0) {
-            JOptionPane.showMessageDialog(new JFrame(),
-                    "No datasets selected!", "Error",
-                    JOptionPane.ERROR_MESSAGE);
-          } else {
-            DataSet result = framework.updateAndCombine(updates);
-            JFrame frameL = framework.visualizeDataSet(result);
-            frameL.pack();
-            frameL.setVisible(true);
-          }
-        }
-      }
-    });
   }
 }

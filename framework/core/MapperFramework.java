@@ -1,16 +1,15 @@
 package core;
 
 import core.datapoint.DataSet;
+import core.datapoint.Event;
 import gui.MapperGui;
 
-import javax.swing.JFrame;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Framework implementation. */
 public class MapperFramework {
   /** GUI listener. */
-  private MapperGui listener;
+  private MapperListener listener;
   /** Registered data plugins. */
   private List<DataPlugin> dataplugins;
   /** Registered visual plugins. */
@@ -33,10 +32,10 @@ public class MapperFramework {
   }
 
   /**
-   * Registers framework listener.
+   * Registers framework listener
    * @param listenerL to register
    */
-  public void registerFrameworkListener(final MapperGui listenerL) {
+  public void registerFrameworkListener(final MapperListener listenerL) {
     listener = listenerL;
   }
 
@@ -57,18 +56,8 @@ public class MapperFramework {
   }
 
   /**
-   * Adds default data.
-   */
-  public void defaultData() {
-    chooseDataPlugin("Spreadsheet loader");
-    enterDataSet("Dataset 1", "ExpertVagabond", "ExpertVagabond.csv");
-    enterDataSet("Dataset 2", "Kristenalana", "Kristenalana.csv");
-    enterDataSet("Dataset 3", "TravisBurke", "TravisBurkePhotography.csv");
-  }
-
-  /**
    * Chooses a data plugin.
-   * @param name of plugin
+   * @name of plugin
    */
   public void chooseDataPlugin(final String name) {
     for (DataPlugin dataplugin : dataplugins) {
@@ -80,7 +69,7 @@ public class MapperFramework {
 
   /**
    * Chooses a visual plugin.
-   * @param name of plugin
+   * @name of plugin
    */
   public void chooseVisualPlugin(final String name) {
     for (VisualPlugin visualplugin : visualplugins) {
@@ -94,23 +83,21 @@ public class MapperFramework {
   /**
    * Starts taking in data from the chosen data plugin.
    * @param name for the dataset
-   * @param subject the who
    * @param source of data
    */
   public void enterDataSet(final String name, final String subject,
-                           final String source) {
+                         final String source) {
     DataSet newDataSet = new DataSet(name);
     currentDataplugin.setSubject(subject);
 
     currentDataplugin.openConnection(source);
-    while (currentDataplugin.hasNext()) {
+    while(currentDataplugin.hasNext()) {
       ClientEvent clientEvent = currentDataplugin.getEvent();
       newDataSet.addEvent(clientEvent);
     }
     currentDataplugin.closeConnection();
 
     datasets.add(newDataSet);
-    listener.updateDatasets();
   }
 
   /**
@@ -123,49 +110,5 @@ public class MapperFramework {
       availableDatasets[i] = datasets.get(i).toString();
     }
     return availableDatasets;
-  }
-
-  /**
-   * Removes dataset with given name from the framework.
-   * @param name of dataset
-   */
-  public void removeDataset(final String name) {
-    for (DataSet dataset : datasets) {
-      if (dataset.toString().equals(name)) {
-        datasets.remove(dataset);
-        listener.updateDatasets();
-      }
-    }
-  }
-
-  /**
-   * Updates the priorities and combines given datasets.
-   * @param updates to combine
-   * @return combined datasets
-   */
-  public DataSet updateAndCombine(final List<Integer> updates) {
-    int numUpdates = updates.size() / 2;
-    List<DataSet> toCombine = new ArrayList<>();
-    for (int i = 0; i < numUpdates; i++) {
-      DataSet temp = datasets.get(updates.get(i * 2));
-      temp.setPriority(updates.get(i * 2 + 1));
-      toCombine.add(temp);
-    }
-    return DataSet.combineDatasets(toCombine);
-  }
-
-  /**
-   * Visualizaes the dataset.
-   * @param set to visualize
-   * @return frame with image/application
-   */
-  public JFrame visualizeDataSet(final DataSet set) {
-    if (currentVisualplugin != null) {
-      currentVisualplugin.initFigure();
-      currentVisualplugin.addData(set);
-
-      return currentVisualplugin.getFinalFigure();
-    }
-    return null;
   }
 }

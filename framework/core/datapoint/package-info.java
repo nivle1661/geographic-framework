@@ -1,2 +1,2 @@
-/** Contains internal representation of data for the Framework. */
+/** Contains internal representation of data for the Framework */
 package core.datapoint;
