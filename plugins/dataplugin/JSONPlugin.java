@@ -153,4 +153,3 @@ public class JSONPlugin implements DataPlugin {
 			e.printStackTrace();
 		}
 	}
-}

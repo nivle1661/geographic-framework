@@ -101,5 +101,3 @@ public class BarChartPlugin implements VisualPlugin {
         return "Bar Chart Visualizer";
     }
 }
-
-
