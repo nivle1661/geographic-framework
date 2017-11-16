@@ -52,6 +52,7 @@ public final class Main {
     List<DataPlugin> dataplugins = loadDataPlugins();
     List<VisualPlugin> visualplugins = loadVisualPlugins();
 
+    /**
     MapperFramework test = new MapperFramework();
     test.registerDataPlugin(new CSVPlugin());
     test.chooseDataPlugin(new CSVPlugin().toString());
@@ -68,6 +69,7 @@ public final class Main {
     } catch (Exception e) {
       e.printStackTrace();
     }
+    */
 
     frame.add(new MapperGui(dataplugins, visualplugins));
   }
