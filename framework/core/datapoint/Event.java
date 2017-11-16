@@ -332,4 +332,12 @@ public class Event implements Comparable<Event> {
   public Date getTime() {
     return time;
   }
+  
+  /**
+   * return the subject
+   * @return event subject
+   */
+  public String getSubject() {
+	  return subject;
+  }
 }
