@@ -340,4 +340,12 @@ public class Event implements Comparable<Event> {
   public String getSubject() {
 	  return subject;
   }
+
+  /**
+   * Returns quantity.
+   * @return quantity
+   */
+  public int getQuantity() {
+    return quantity;
+  }
 }
