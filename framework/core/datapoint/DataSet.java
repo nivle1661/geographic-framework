@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static core.datapoint.Event.MAX_LATLONG;
-import static core.datapoint.Event.distance;
 
 /** Holds all the event data from one connection from a dataplugin. */
 public class DataSet {
@@ -19,6 +18,12 @@ public class DataSet {
 
   /** Name of the dataset. */
   private String name;
+
+  /** Contains pairwise distances between all events. */
+  private double[][] distances;
+
+  /** Contains all keywords from all events in dataset. */
+  private List<String> keywords;
 
   /** Frequency of events per location. */
   private Map<String, Integer> freqLoc;
@@ -34,8 +39,8 @@ public class DataSet {
   /** Maximum Latitude. */
   private double maxLat;
 
-  /** Convert from millesconds to hours. */
-  private final double mille = 60 * 60 * 1000;
+  /** Optimal route. */
+  private List<Event> route;
 
   /**
    * Constructor of empty DataSet.
@@ -45,6 +50,8 @@ public class DataSet {
     name = nameL;
 
     events = new ArrayList<>();
+    keywords = new ArrayList<>();
+
     freqLoc = new HashMap<>();
     freqKeyword = new HashMap<>();
 
@@ -59,21 +66,24 @@ public class DataSet {
    * @param eventsL events
    * @param freqKeywordL keyword frequency map
    * @param freqLocL location frequency map
-   * @param latitudes min and max
-   * @param longitudes min and max
+   * @param minLatL minimum latitude
+   * @param maxLatL maximum latitude
+   * @param minLongL minimum longitude
+   * @param maxLongL maximum longitude
    */
   public DataSet(final List<Event> eventsL,
                  final Map<String, Integer> freqKeywordL,
                  final Map<String, Integer> freqLocL,
-                 final double[] latitudes, final double[] longitudes) {
+                 final double minLatL, final double maxLatL,
+                 final double minLongL, final double maxLongL) {
     events = eventsL;
     freqKeyword = freqKeywordL;
     freqLoc = freqLocL;
 
-    minLat = latitudes[0];
-    maxLat = latitudes[1];
-    minLong = longitudes[0];
-    maxLong = longitudes[1];
+    minLat = minLatL;
+    maxLat = maxLatL;
+    minLong = minLongL;
+    maxLong = maxLongL;
   }
 
   /**
@@ -103,14 +113,12 @@ public class DataSet {
       maxLong = Math.max(newEvent.eastLongitude, maxLong);
 
       //Incrementing values for frequency counts
-      if (temp != null) {
-        for (String keyword : temp) {
-          int count = freqKeyword.getOrDefault(keyword, 0);
-          freqKeyword.put(keyword, count + 1);
-        }
+      for (String keyword : temp) {
+        int count = freqKeyword.getOrDefault(keyword, 0);
+        freqKeyword.put(keyword, count + 1);
       }
       int count = freqLoc.getOrDefault(location, 0);
-      freqLoc.put(location, count + 1);
+      freqKeyword.put(location, count + 1);
     }
   }
 
@@ -124,12 +132,12 @@ public class DataSet {
   /**
    * Combins multiple datasets into one.
    * @param datasets to combine
-   * @return aggregate dataset
    */
   public static DataSet combineDatasets(final List<DataSet> datasets) {
     double minLong = MAX_LATLONG, maxLong = -MAX_LATLONG;
     double minLat = MAX_LATLONG, maxLat = -MAX_LATLONG;
 
+    //TODO: Do this
     Map<String, Integer> freqKeyword = new HashMap<>();
     Map<String, Integer> freqLoc = new HashMap<>();
     List<Event> events = new ArrayList<>();
@@ -154,66 +162,9 @@ public class DataSet {
       }
     }
     Collections.sort(events);
-    System.out.println(events.size());
 
     return new DataSet(events, freqKeyword, freqLoc,
-                       new double[]{minLat, maxLat},
-                       new double[]{minLong, maxLong});
-  }
-
-  /**
-   * Returns an optimal route based on priority.
-   * @param speed maximum speed
-   * @return list of events in order
-   */
-  public List<Event> getOptimalRoute(final double speed) {
-    List<Event> priorityEvents = new ArrayList<>(events);
-    Collections.sort(priorityEvents, (o1, o2) -> {
-      if (o1.getPriority() == o2.getPriority()) {
-        return o1.time.compareTo(o2.time);
-      }
-      return Integer.compare(o2.getPriority(), o1.getPriority());
-    });
-
-    List<Event> result = new ArrayList<>();
-    result.add(priorityEvents.remove(0));
-
-    while (priorityEvents.size() > 0) {
-      Event temp = priorityEvents.remove(0);
-      int j = result.size();
-      while ((j > 0) && result.get(j - 1).time.after(temp.time)) {
-        j--;
-      }
-
-      //Check if reachable from element before and after it
-      boolean okBefore = (j == 0);
-      if (!okBefore) {
-        Event tempL = result.get(j - 1);
-        okBefore = speed
-                > distance(temp, tempL) / ((temp.time.getTime()
-                                            - tempL.time.getTime()) / mille);
-      }
-      boolean okAfter = (j == result.size() || j == result.size() - 1);
-      if (!okAfter) {
-        Event tempL = result.get(j + 1);
-        okAfter = speed
-                > distance(temp, tempL) / ((tempL.time.getTime()
-                                           - temp.time.getTime()) / mille);
-      }
-
-      if (okBefore && okAfter) {
-        result.add(j, temp);
-      }
-    }
-    return result;
-  }
-
-  public Map<String, Integer> getFreqLoc() {
-    return freqLoc;
-  }
-
-  public Map<String, Integer> getFreqKeyword() {
-    return freqKeyword;
+                       minLat, maxLat, minLong, maxLong);
   }
 
   /**
