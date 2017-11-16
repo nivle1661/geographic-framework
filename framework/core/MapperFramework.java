@@ -16,7 +16,7 @@ public class MapperFramework {
   /** Registered visual plugins. */
   private List<VisualPlugin> visualplugins;
   /** Available datasets. */
-  private List<DataSet> datasets;
+  private final List<DataSet> datasets;
 
   /** Current data plugin being used. */
   private DataPlugin currentDataplugin;
@@ -90,28 +90,29 @@ public class MapperFramework {
     }
   }
 
-
   /**
    * Starts taking in data from the chosen data plugin.
    * @param name for the dataset
    * @param subject the who
    * @param source of data
    */
-  public synchronized void enterDataSet(final String name, final String subject,
-                                        final String source) {
-    DataSet newDataSet = new DataSet(name);
-    currentDataplugin.setSubject(subject);
+  public void enterDataSet(final String name, final String subject,
+                           final String source) {
+    synchronized (datasets) {
+      DataSet newDataSet = new DataSet(name);
+      currentDataplugin.setSubject(subject);
 
-    currentDataplugin.openConnection(source);
-    while (currentDataplugin.hasNext()) {
-      ClientEvent clientEvent = currentDataplugin.getEvent();
-      newDataSet.addEvent(clientEvent);
-    }
-    currentDataplugin.closeConnection();
+      currentDataplugin.openConnection(source);
+      while (currentDataplugin.hasNext()) {
+        ClientEvent clientEvent = currentDataplugin.getEvent();
+        newDataSet.addEvent(clientEvent);
+      }
+      currentDataplugin.closeConnection();
 
-    datasets.add(newDataSet);
-    if (listener != null) {
-      listener.updateDatasets();
+      datasets.add(newDataSet);
+      if (listener != null) {
+        listener.updateDatasets();
+      }
     }
   }
 
@@ -119,7 +120,7 @@ public class MapperFramework {
    * Returns array of the names of datasets.
    * @return array of the names of datasets
    */
-  public synchronized String[] datasets() {
+  public String[] datasets() {
     String[] availableDatasets = new String[datasets.size()];
     for (int i = 0; i < datasets.size(); i++) {
       availableDatasets[i] = datasets.get(i).toString();
@@ -131,12 +132,14 @@ public class MapperFramework {
    * Removes dataset with given name from the framework.
    * @param name of dataset
    */
-  public synchronized void removeDataset(final String name) {
-    for (DataSet dataset : datasets) {
-      if (dataset.toString().equals(name)) {
-        datasets.remove(dataset);
-        if (listener != null) {
-          listener.updateDatasets();
+  public void removeDataset(final String name) {
+    synchronized (datasets) {
+      for (DataSet dataset : datasets) {
+        if (dataset.toString().equals(name)) {
+          datasets.remove(dataset);
+          if (listener != null) {
+            listener.updateDatasets();
+          }
         }
       }
     }

@@ -33,14 +33,16 @@ public class FrameworkTest {
     f.enterDataSet("Dataset 2", "Kristenalana", "Kristenalana.csv");
     Assert.assertEquals(f.datasets().length, 2);
 
+    f.chooseDataPlugin("Set List Loader");
+    f.enterDataSet("Dataset 5", "Kendrick Lamar",
+            "381086ea-f511-4aba-bdf9-71c753dc5077");
+
     f.chooseDataPlugin("JSON loader");
     f.enterDataSet("Dataset 3", "SoccerBeast", "soccerBeast.json");
     f.enterDataSet("Dataset 4", "EventBeast", "eventBeast.json");
 
-    f.chooseDataPlugin("Set List Loader");
-    f.enterDataSet("Dataset 5", "Kendrick Lamar",
-            "381086ea-f511-4aba-bdf9-71c753dc5077");
-    Assert.assertEquals(f.datasets().length, 5);
+    int num = f.datasets().length;
+    Assert.assertEquals(num, 5);
 
     f.removeDataset("Dataset 3");
     Assert.assertEquals(f.datasets().length, 4);
