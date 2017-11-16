@@ -9,6 +9,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
 
 import static org.junit.Assert.assertEquals;
@@ -34,7 +35,7 @@ public class FrameworkTest {
 
     f.chooseDataPlugin("JSON loader");
     f.enterDataSet("Dataset 3", "SoccerBeast", "soccerBeast.json");
-    f.enterDataSet("Dataset 4", "EventBeast", "eeventBeast.json");
+    f.enterDataSet("Dataset 4", "EventBeast", "eventBeast.json");
 
     f.chooseDataPlugin("Set List Loader");
     f.enterDataSet("Dataset 5", "Kendrick Lamar",
@@ -47,6 +48,12 @@ public class FrameworkTest {
     Assert.assertEquals(f.datasets().length, 4);
 
     List<DataSet> datasets = f.getDatasets();
+    DataSet dataset1 = datasets.get(0);
+    DataSet dataset2 = datasets.get(1);
+    Map<String, Integer> freqKeyword = dataset1.getFreqKeyword();
+    Map<String, Integer> freqLoc = dataset2.getFreqLoc();
+    Assert.assertEquals((int) freqKeyword.get("canadabydesign"), 7);
+    Assert.assertEquals((int) freqLoc.get("New York, New York"), 2);
   }
 
   /**
