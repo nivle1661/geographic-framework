@@ -154,7 +154,6 @@ public class DataSet {
       }
     }
     Collections.sort(events);
-    System.out.println(events.size());
 
     return new DataSet(events, freqKeyword, freqLoc,
                        new double[]{minLat, maxLat},

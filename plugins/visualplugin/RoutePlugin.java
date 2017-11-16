@@ -67,7 +67,6 @@ public class RoutePlugin implements VisualPlugin {
       HttpURLConnection con = (HttpURLConnection) url.openConnection();
       con.setRequestMethod("GET");
       int responseCode = con.getResponseCode();
-      System.out.println("GET Response Code :: " + responseCode);
       if (responseCode == HttpURLConnection.HTTP_OK) {
         Image image = ImageIO.read(con.getInputStream());
         ImageIcon imageIcon = new ImageIcon(image);
