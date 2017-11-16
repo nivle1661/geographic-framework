@@ -5,7 +5,7 @@
 ###### SetListPlugin - 
 Name: Enter what you want the dataset to be called <br />
 Subject: Name of the artist <br />
-Source: go to https://musicbrainz.org/doc/MusicBrainz_Identifier and enter the name of the artist you want. <br />
+Source: Go to https://musicbrainz.org/doc/MusicBrainz_Identifier and enter the name of the artist you want. <br />
 Click on the required one and copy the MBID from the details tab. It should look like this. e.g. <br />
 Kendrick Lamar - 381086ea-f511-4aba-bdf9-71c753dc5077 <br />
 	   
