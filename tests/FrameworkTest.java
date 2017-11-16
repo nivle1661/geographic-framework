@@ -3,6 +3,7 @@ package tests;
 import core.DataPlugin;
 import core.MapperFramework;
 import core.datapoint.DataSet;
+import core.datapoint.Event;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -56,6 +57,13 @@ public class FrameworkTest {
     Map<String, Integer> freqLoc = dataset2.getFreqLoc();
     Assert.assertEquals((int) freqKeyword.get("canadabydesign"), 7);
     Assert.assertEquals((int) freqLoc.get("New York, New York"), 2);
+
+    DataSet metaData = DataSet.combineDatasets(datasets);
+    List<Event> route = metaData.getOptimalRoute(50);
+    for (int i = 0; i < route.size() - 1; i++) {
+      Assert.assertTrue(route.get(i + 1).getTime().getTime() -
+              route.get(i).getTime().getTime() > 0);
+    }
   }
 
   /**
