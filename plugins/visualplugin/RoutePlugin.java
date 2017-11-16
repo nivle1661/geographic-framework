@@ -26,7 +26,7 @@ public class RoutePlugin implements VisualPlugin {
   private JFrame result;
 
   /** Speeds to visualize for optimal route. */
-  private final double[] speeds = new double[]{20, 60, 500};
+  private final int[] speeds = new int[]{20, 60, 500};
   /** Colors of the routes. */
   private final String[] colors = new String[]{"red", "blue", "green"};
 
@@ -50,7 +50,7 @@ public class RoutePlugin implements VisualPlugin {
 
     for (int i = 0; i < speeds.length; i++) {
       api.append("&path=color:").append(colors[i])
-              .append("|weight:5");
+              .append("|weight:4");
 
       List<Event> route = set.getOptimalRoute(speeds[i]);
       for (Event event : route) {
@@ -80,9 +80,9 @@ public class RoutePlugin implements VisualPlugin {
         result.setLayout(new BorderLayout());
         JTextArea header = new JTextArea(" This visualization displays the"
           + " optimal path based on priority of events.\n"
-          + " Red: 20mph\n"
-          + " Blue: 60mph\n"
-          + " Yellow: 500mph");
+          + " " + colors[0] + ": " + speeds[0] + "mph\n"
+          + " " + colors[1] + ": " + speeds[1] + "mph\n"
+          + " " + colors[2] + ": " + speeds[2] + "mph");
         header.setEditable(false);
         header.setBackground(Color.lightGray);
         result.add(header, BorderLayout.NORTH);
