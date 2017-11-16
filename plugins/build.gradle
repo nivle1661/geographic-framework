@@ -4,4 +4,5 @@ apply plugin: 'application'
 
 dependencies {
 	compile files('lib/java-json.jar')
+	compile files('lib/JMapViewer.jar')
 }
