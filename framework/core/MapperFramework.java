@@ -131,7 +131,7 @@ public class MapperFramework {
    */
   public void removeDataset(final String name) {
     for (DataSet dataset : datasets) {
-      if (datasets.toString().equals(name)) {
+      if (dataset.toString().equals(name)) {
         datasets.remove(dataset);
         listener.updateDatasets();
       }
