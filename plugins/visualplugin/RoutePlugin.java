@@ -21,14 +21,14 @@ import java.util.List;
 /** Visualization plugin for optimal routes. */
 public class RoutePlugin implements VisualPlugin {
   /** Google Static Maps API key. */
-  private String api_key = "AIzaSyDersbd0-W5Js7hBKIPKOyQE5rKQ7hr4rA";
+  private String apikey = "AIzaSyDersbd0-W5Js7hBKIPKOyQE5rKQ7hr4rA";
   /** JFrame containing visualization. */
   private JFrame result;
 
   /** Speeds to visualize for optimal route. */
   private final double[] speeds = new double[]{20, 60, 500};
   /** Colors of the routes. */
-  private final String[] colors = new String[]{"red", "blue", "yellow"};
+  private final String[] colors = new String[]{"red", "blue", "green"};
 
   /**
    * Does nothing since we rely on the data to get the map.
@@ -50,7 +50,7 @@ public class RoutePlugin implements VisualPlugin {
 
     for (int i = 0; i < speeds.length; i++) {
       api.append("&path=color:").append(colors[i])
-              .append("|weight:2");
+              .append("|weight:5");
 
       List<Event> route = set.getOptimalRoute(speeds[i]);
       for (Event event : route) {
@@ -58,7 +58,7 @@ public class RoutePlugin implements VisualPlugin {
                 .append(",").append(String.format("%.4f", event.longitude));
       }
     }
-    api.append("&key=").append(api_key);
+    api.append("&key=").append(apikey);
     System.out.println(api);
     System.out.println(api.length());
 
