@@ -306,5 +306,10 @@ public class HeatMapPlugin implements VisualPlugin {
 			return potFiveColor;
 		}
 	}
+	
+	@Override 
+	public String toString() {
+		return "Heat Map Plugin";
+	}
 
 }
