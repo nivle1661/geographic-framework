@@ -31,7 +31,6 @@ import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
 import org.openstreetmap.gui.jmapviewer.interfaces.TileLoader;
 import org.openstreetmap.gui.jmapviewer.interfaces.TileSource;
-import org.openstreetmap.gui.jmapviewer.tilesources.BingAerialTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 import java.util.List;
 
@@ -43,7 +42,8 @@ import java.util.List;
  * population is relatively low compared to other events, and a circle with a
  * larger radius will be shown if the population is relatively large. The
  * circles shown are color coded into pots with a blue color being lowest, and a
- * red color being the highest.
+ * red color being the highest. If the population of an event is too low, it will not be marked 
+ * on the map, though the subject of the event will appear.
  * 
  * @author APadilla
  *
@@ -103,7 +103,6 @@ public class HeatMapPlugin implements VisualPlugin {
 			map().addJMVListener(this);
 
 			setLayout(new BorderLayout());
-			setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			setExtendedState(JFrame.MAXIMIZED_BOTH);
 			JPanel panel = new JPanel(new BorderLayout());
 			JPanel panelTop = new JPanel();
@@ -132,8 +131,7 @@ public class HeatMapPlugin implements VisualPlugin {
 			});
 
 			JComboBox<TileSource> tileSourceSelector = new JComboBox<>(
-					new TileSource[] { new OsmTileSource.Mapnik(), new OsmTileSource.CycleMap(),
-							new BingAerialTileSource(), });
+					new TileSource[] { new OsmTileSource.Mapnik() });
 
 			tileSourceSelector.addItemListener(new ItemListener() {
 				@Override
@@ -272,7 +270,7 @@ public class HeatMapPlugin implements VisualPlugin {
 			String sub = event.getSubject();
 			int pop = event.getQuantity();
 			Color color = selectColor(pop);
-			MapMarkerCircle circle = new MapMarkerCircle(null, sub, c(lat, lon), pop / SIZE_CONST);
+			MapMarkerCircle circle = new MapMarkerCircle(null, sub, c(lat, lon), pop/SIZE_CONST);
 			circle.setBackColor(color);
 			circle.setColor(color.darker());
 
