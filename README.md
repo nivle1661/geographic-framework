@@ -1,6 +1,7 @@
 # Team24
 15-214 repo for Team24
 
+## Data Plguins
 SetListPlugin - 
 Name: Enter what you want the dataset to be called
 Subject: Name of the artist
@@ -12,6 +13,7 @@ An MBID is required from the user as there are artists with duplicate names. MBI
 Furthermore the API for setlist.fm (data source) also prefers MBID making it a perfect key. The API returns data in XML form. 
 It is parsed using SAXParser data extraction is the only requirement, making it the optimal choice.
 
+## Visual Plugins
 BarChartPlugin -
 Displays a Bar Chart of the frequency of keywords from the datasets.
 The priority does not matter, but it is used to select which data sources you want. Enter a priority for the data sources you want 
