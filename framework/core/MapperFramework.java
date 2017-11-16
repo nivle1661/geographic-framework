@@ -119,7 +119,7 @@ public class MapperFramework {
    * Returns array of the names of datasets.
    * @return array of the names of datasets
    */
-  public String[] datasets() {
+  public synchronized String[] datasets() {
     String[] availableDatasets = new String[datasets.size()];
     for (int i = 0; i < datasets.size(); i++) {
       availableDatasets[i] = datasets.get(i).toString();
