@@ -168,6 +168,7 @@ public class MapperGui extends JPanel {
       if (availableDatasets.length == 0) {
         JOptionPane.showMessageDialog(new JFrame(), "No datasets to remove!",
                 "Error", JOptionPane.ERROR_MESSAGE);
+        return;
       }
       String name = (String) JOptionPane.showInputDialog(awesome,
               "Remove a data plugin", "Removing data...",
@@ -208,6 +209,7 @@ public class MapperGui extends JPanel {
       if (availableDatasets.length == 0) {
         JOptionPane.showMessageDialog(new JFrame(), "No datasets to remove!",
                 "Error", JOptionPane.ERROR_MESSAGE);
+        return;
       }
       String name = (String) JOptionPane.showInputDialog(awesome,
               "Remove a data plugin", "Removing data...",
