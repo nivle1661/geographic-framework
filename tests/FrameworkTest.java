@@ -64,6 +64,17 @@ public class FrameworkTest {
       Assert.assertTrue(route.get(i + 1).getTime().getTime() -
               route.get(i).getTime().getTime() > 0);
     }
+
+    ArrayList<Integer> indices = new ArrayList<>();
+    indices.add(0);
+    indices.add(1);
+    indices.add(3);
+    DataSet metaData2 = f.updateAndCombine(indices);
+    List<Event> route2 = metaData2.getOptimalRoute(500);
+    for (int i = 0; i < route2.size() - 1; i++) {
+      Assert.assertTrue(route2.get(i + 1).getTime().getTime() -
+              route2.get(i).getTime().getTime() > 0);
+    }
   }
 
   /**
