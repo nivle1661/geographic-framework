@@ -56,6 +56,9 @@ public class MapperFramework {
     visualplugins.add(plugin);
   }
 
+  /**
+   * Adds default data.
+   */
   public void defaultData() {
     chooseDataPlugin("Spreadsheet loader");
     enterDataSet("Dataset 1", "ExpertVagabond", "ExpertVagabond.csv");

@@ -63,7 +63,7 @@ public class Event implements Comparable<Event> {
   /** OK connection. */
   private static final int OK_CONNECTION = 200;
   /** Tolerance for double equality. */
-  private static final double epsilon = 0.001;
+  private static final double EPSILON = 0.001;
 
   /**
    * Returns the distance between two events based on longitude, latitude.
@@ -73,10 +73,10 @@ public class Event implements Comparable<Event> {
    * @return distance between event1 and event2, in miles
    */
   public static double distance(final Event event1, final Event event2) {
-    if (Math.abs(event1.latitude - MAX_LATLONG) < epsilon
-        || Math.abs(event1.longitude - MAX_LATLONG) < epsilon
-        || Math.abs(event2.latitude - MAX_LATLONG) < epsilon
-        || Math.abs(event2.longitude - MAX_LATLONG) < epsilon) {
+    if (Math.abs(event1.latitude - MAX_LATLONG) < EPSILON
+        || Math.abs(event1.longitude - MAX_LATLONG) < EPSILON
+        || Math.abs(event2.latitude - MAX_LATLONG) < EPSILON
+        || Math.abs(event2.longitude - MAX_LATLONG) < EPSILON) {
       return Double.MAX_VALUE;
     }
 

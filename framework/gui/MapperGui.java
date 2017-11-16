@@ -165,7 +165,6 @@ public class MapperGui extends JPanel {
     removeDatasetMenuItem.setMnemonic(KeyEvent.VK_N);
     removeDatasetMenuItem.addActionListener(event -> {
       String[] availableDatasets = framework.datasets();
-      //TODO: Check for 0
       String name = (String) JOptionPane.showInputDialog(awesome,
               "Remove a data plugin", "Removing data...",
               JOptionPane.QUESTION_MESSAGE, null, availableDatasets,
