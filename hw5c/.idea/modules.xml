@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Team12-public.iml" filepath="$PROJECT_DIR$/.idea/modules/Team12-public.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/framework/framework.iml" filepath="$PROJECT_DIR$/.idea/modules/framework/framework.iml" group="framework" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/framework/framework_main.iml" filepath="$PROJECT_DIR$/.idea/modules/framework/framework_main.iml" group="framework" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/framework/framework_test.iml" filepath="$PROJECT_DIR$/.idea/modules/framework/framework_test.iml" group="framework" />
+      <module fileurl="file://$PROJECT_DIR$/hw5c.iml" filepath="$PROJECT_DIR$/hw5c.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/plugins.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/plugins.iml" group="plugins" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/plugins_main.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/plugins_main.iml" group="plugins" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/plugins_test.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/plugins_test.iml" group="plugins" />
+    </modules>
+  </component>
+</project>
