@@ -1,5 +1,3 @@
-package tests;
-
 import core.DataPlugin;
 import core.MapperFramework;
 import core.datapoint.DataSet;

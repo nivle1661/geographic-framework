@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Team24.iml" filepath="$PROJECT_DIR$/.idea/modules/Team24.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Team24.iml" filepath="$PROJECT_DIR$/Team24.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Team24_main.iml" filepath="$PROJECT_DIR$/.idea/modules/Team24_main.iml" group="Team24" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/Team24_test.iml" filepath="$PROJECT_DIR$/.idea/modules/Team24_test.iml" group="Team24" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/plugins/plugins.iml" filepath="$PROJECT_DIR$/.idea/modules/plugins/plugins.iml" group="plugins" />
+    </modules>
+  </component>
+</project>

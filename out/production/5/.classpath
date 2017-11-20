@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry excluding="Main.java" kind="src" path="framework"/>
+	<classpathentry kind="lib" path="lib/java-json.jar"/>
+	<classpathentry kind="lib" path="lib/JMapViewer.jar"/>
+	<classpathentry kind="lib" path="lib/xchart-3.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/xchart-demo-3.5.0.jar"/>
+	<classpathentry kind="output" path="out/production/Team24"/>
+</classpath>

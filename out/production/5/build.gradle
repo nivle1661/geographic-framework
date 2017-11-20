@@ -1,7 +1,50 @@
 apply plugin: 'java'
-apply plugin: 'maven'
+apply plugin: 'eclipse'
+apply plugin: 'checkstyle'
+apply plugin: 'jacoco'
+apply plugin: 'findbugs'
 apply plugin: 'application'
 
-dependencies {
-	compile files('lib/java-json.jar')
+mainClassName = 'Main'
+
+sourceSets {
+  main {
+    java {
+      srcDirs = ['framework']
+    }
+  }
 }
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  testCompile group: 'junit', name: 'junit', version: '4.11'
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+checkstyle {
+  ignoreFailures = true
+  toolVersion = "6.7"
+  sourceSets = [sourceSets.main]
+}
+
+findbugs {
+  ignoreFailures = true
+}
+
+tasks.withType(FindBugs) {
+  reports {
+    xml.enabled false
+    html.enabled true
+  }
+}
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+}
+
+
