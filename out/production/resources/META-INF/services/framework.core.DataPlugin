@@ -1,0 +1,6 @@
+# List of data plugins to be registered by framework.
+# Provide fully qualified class names here,
+# with one plugin per line.
+plugins.dataplugin.CSVPlugin
+plugins.dataplugin.JSONPlugin
+plugins.dataplugin.SetListPlugin

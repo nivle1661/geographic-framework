@@ -10,7 +10,7 @@ mainClassName = 'Main'
 sourceSets {
   main {
     java {
-      srcDirs = ['framework']
+      srcDirs 'main'
     }
   }
 }
@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
   testCompile group: 'junit', name: 'junit', version: '4.11'
-  compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile fileTree(dir: 'lib', include: ['*.jar'])
 }
 
 checkstyle {
