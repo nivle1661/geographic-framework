@@ -10,16 +10,12 @@ import javax.swing.WindowConstants;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.util.Iterator;
-import java.util.List;
-import javax.swing.JFrame;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.PolarChartPanel;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.PolarPlot;
 import org.jfree.chart.renderer.DefaultPolarItemRenderer;
@@ -30,12 +26,14 @@ import org.jfree.data.xy.XYSeriesCollection;
 public class CircleSpectrumVisualizer implements Visualizer {
   private JFrame frame;
   private MusicData song;
-  ChartPanel panel;
+  private ChartPanel panel;
+  private JFreeChart chart;
+  private XYSeriesCollection set;
   private boolean stopped;
   private double[] frequencies;
   private long frameCount;
 
-  private final double degrees = 3.60;
+  private final double degrees = 7.20;
 
   private String title;
 
@@ -43,12 +41,12 @@ public class CircleSpectrumVisualizer implements Visualizer {
   public void load(MusicData song) {
     this.song = song;
     title = song.toString();
+    frequencies = song.getFirstFrequency(BucketCount.FIFTY);
   }
 
   @Override
   public void start() {
     stopped = false;
-    frequencies = song.getFirstFrequency(BucketCount.ONE_HUNDRED);
     frameCount = 0;
 
     frame = new JFrame();
@@ -59,55 +57,62 @@ public class CircleSpectrumVisualizer implements Visualizer {
         stopped = true;
       }
     });
-    frame.setSize(800, 800);
-    panel = new ChartPanel(createChart(createDataset()));
-    panel.setPreferredSize(new Dimension(500, 500));
+    frame.setSize(1000, 1000);
+
+    set = (XYSeriesCollection) createDataset();
+    chart = ChartFactory.createPolarChart("", set, false, true, false);
+    PolarPlot plot = (PolarPlot) chart.getPlot();
+    plot.setRadiusGridlinesVisible(false);
+    plot.setAngleOffset(360.0/50);
+
+    plot.setBackgroundPaint(Color.WHITE);
+    plot.setAngleGridlinePaint(Color.BLACK);
+    plot.setRadiusGridlinePaint(Color.LIGHT_GRAY);
+
+    NumberAxis rangeAxis = (NumberAxis) plot.getAxis();
+    rangeAxis.setTickLabelsVisible(false);
+
+    final DefaultPolarItemRenderer renderer = (DefaultPolarItemRenderer) plot.getRenderer();
+
+    for (int i = 0; i < 50; i++) {
+      renderer.setSeriesFilled(i, true);
+      renderer.setSeriesPaint(i,
+              Color.getHSBColor((float) i / (float) 50, 0.85f, 1.0f));
+    }
+
+    panel = new PolarChartPanel(chart);
+    panel.setPreferredSize(new Dimension(900, 900));
     frame.add(panel);
     frame.setVisible(true);
     frame.pack();
   }
 
   private XYDataset createDataset() {
-    XYSeriesCollection result = new XYSeriesCollection();
-    XYSeries series = new XYSeries("Frequency");
-    for (int i = 0; i < 100; i++) {
-      series.add(degrees*i, frequencies[0]);
-      series.add(degrees*(i+1), frequencies[0]);
-    }
-    result.addSeries(series);
-    return result;
-  }
+    set = new XYSeriesCollection();
+    for (int i = 0; i < 50; i++) {
+      XYSeries temp = new XYSeries(i);
+      temp.add(degrees * i, 0.1);
+      temp.add(degrees * i + 1, 1000 * frequencies[i]);
+      temp.add(degrees * (i+1) - 1, 1000 * frequencies[i]);
 
-  private JFreeChart createChart(final XYDataset dataset) {
-    JFreeChart chart = ChartFactory.createPolarChart(
-            title, dataset, true, false, false);
-    PolarPlot plot = (PolarPlot) chart.getPlot();
-    plot.setBackgroundPaint(Color.white);
-    plot.setAngleGridlinePaint(Color.black);
-    plot.setRadiusGridlinePaint(Color.lightGray);
-    DefaultPolarItemRenderer r = (DefaultPolarItemRenderer) plot.getRenderer();
-    r.setFillComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.5f));
-    for (int i = 0; i < dataset.getSeriesCount(); i++ ) {
-      r.setSeriesFilled(i, true);
-      r.setShapesVisible(false);
-      r.setDrawOutlineWhenFilled(false);
+      set.addSeries(temp);
     }
-    NumberAxis rangeAxis = (NumberAxis) plot.getAxis();
-    rangeAxis.setTickLabelsVisible(false);
-    return chart;
+    return set;
   }
 
   @Override
   public void drawNextFrame() {
-    if (!song.frequenciesDone()) frequencies = song.getNextFrequency();
+    if (!song.frequenciesDone())
+      frequencies = song.getNextFrequency();
     else stopped = true;
     frameCount++;
 
-    SwingUtilities.invokeLater(() -> {
-      // updates the Points' positions and adds new Points
-      panel.removeAll();
-      panel.add(new ChartPanel(createChart(createDataset())));
-    });
+    if (frameCount % 3 == 0) {
+      SwingUtilities.invokeLater(() -> {
+        // updates the Points' positions and adds new Points
+        ((PolarPlot) chart.getPlot()).setDataset(createDataset());
+      });
+    }
   }
 
   @Override
