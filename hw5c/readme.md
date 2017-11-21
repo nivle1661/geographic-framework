@@ -1,4 +1,4 @@
-#Homework 5c Project
+# Homework 5c Project
 
-##JAR file
+## JAR file
 Contained in out/artificats
