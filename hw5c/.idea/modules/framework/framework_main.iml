@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module external.linked.project.id=":framework:main" external.linked.project.path="$MODULE_DIR$/../../../../../Team12-public/framework" external.root.project.path="$MODULE_DIR$/../../../../../Team12-public" external.system.id="GRADLE" external.system.module.group="Team12-public" external.system.module.type="sourceSet" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
+    <output url="file://$MODULE_DIR$/../../../../../Team12-public/framework/out/production/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../../../../Team12-public/framework/src/main">
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../Team12-public/framework/src/main/java" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/../../../../../Team12-public/framework/src/main/resources" type="java-resource" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../../../../../Team12-public/framework/lib/jl1.0.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Gradle: com.github.wendykierp:JTransforms:3.1" level="project" />
+    <orderEntry type="library" name="Gradle: pl.edu.icm:JLargeArrays:1.5" level="project" />
+    <orderEntry type="library" name="Gradle: org.apache.commons:commons-math3:3.5" level="project" />
+  </component>
+</module>

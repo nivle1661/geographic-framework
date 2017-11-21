@@ -1,0 +1,27 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="hw5c:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/hw5c_jar</output-path>
+    <root id="archive" name="hw5c.jar">
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/../src/main/resources/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="module-output" name="hw5c" />
+      <element id="module-output" name="framework_main" />
+      <element id="module-output" name="plugins_main" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.apache.commons/commons-math3/3.5/13af68e9a11576953f5c4b09436f8207be9d3a27/commons-math3-3.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/gov.nist.math/jama/1.0.3/8bcf5a314b76cadd68daa37eafe0a46d8909ab47/jama-1.0.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../../Team12-public/framework/lib/jl1.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okhttp3/okhttp/3.9.0/1b6c10b5120995a7542c1a31b7828fb8593c8ba/okhttp-3.9.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/de.erichseifert.vectorgraphics2d/VectorGraphics2D/0.11/f3bf8fe05b7997e03941bf77428598137500c300/VectorGraphics2D-0.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.yannrichet/JMathPlot/1.0.1/6d1799b45e96214db2c67fd59af4701d00e19ae4/JMathPlot-1.0.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.yannrichet/JMathIO/1.0/433ef1ffcfdae4decfdb95abdda08aa29a58a9d7/JMathIO-1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.wendykierp/JTransforms/3.1/f1f6d3c9c9bc04f848e38bdb77dea01e8764a01f/JTransforms-3.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.hamcrest/hamcrest-core/1.3/42a25dc3219429f0e5d060061f71acb49bf010a0/hamcrest-core-1.3.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/junit/junit/4.11/4e031bb61df09069aeb2bffb4019e7a5034a4ee0/junit-4.11.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/pl.edu.icm/JLargeArrays/1.5/fe1350c7b5537c144fb0af39206e212ad1bbbe2/JLargeArrays-1.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.yannrichet/JMathArray/1.0/9c473faf0bcf014b85ab31475d0c6c0a9795149d/JMathArray-1.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.knowm.xchart/xchart/3.5.0/d0ec5cff2450cf013c4289d5c7c730c245a701ba/xchart-3.5.0.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
