@@ -1,4 +1,4 @@
-# 15-214 repo for Homework 5
+# Framework in Java to handle geographic-based data
 
 ## Data Plugins
 ###### SetListPlugin - 
