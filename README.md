@@ -1,5 +1,4 @@
-# Team24
-15-214 repo for Team24
+# 15-214 repo for Homework 5
 
 ## Data Plugins
 ###### SetListPlugin - 
