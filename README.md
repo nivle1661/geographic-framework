@@ -1,4 +1,4 @@
-# Framework in Java to handle geographic-based data
+# Framework in Java to handle geographic-based events
 
 ## Data Plugins
 ###### SetListPlugin - 
