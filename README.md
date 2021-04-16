@@ -1,5 +1,7 @@
 # Framework in Java to handle geographic-based events
 
+Disclaimer: Uses Bing Maps API to grab geographic data based on location.
+
 ## Data Plugins
 ###### SetListPlugin - 
 Name: Enter what you want the dataset to be called <br />
